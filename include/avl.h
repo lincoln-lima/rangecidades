@@ -1,10 +1,16 @@
-#ifndef __AVL__
-#define __AVL__
+#ifndef __AVLMOD__
+#define __AVLMOD__
 #include<stdio.h>
 #include<stdlib.h>
+typedef struct _reg{
+    void * item;
+    struct _reg * prox;
+} Regs;
+
 typedef struct _node {
-    int num;
+    Regs * regs;
     int h;
+    struct _node * pai;
     struct _node * esq;
     struct _node * dir;
 } Node;
@@ -24,11 +30,11 @@ void _rebalancear(Node ** node);
 void _re(Node ** node);
 void _rd(Node ** node);
 /* inserção */
-void insere_avl(Arv * arv, int num);
-void _insere(Node ** node, int num);
+void insere_avl(Arv * arv, void * reg);
+void _insere(Node ** node, void * reg);
 /* busca */
-int busca_avl(Arv * arv, int num);
-int _busca(Node ** node, int num);
+int busca_avl(Arv * arv, void * reg);
+int _busca(Node ** node, void * reg);
 /* destrói */
 void libera_avl(Arv * arv);
 void _libera(Node * node);
