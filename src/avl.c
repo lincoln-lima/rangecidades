@@ -15,16 +15,26 @@ int _altura(Node * node) {
 }
 
 Node ** _sucessor(Node ** node) {
-    if(node->esq) _sucessor(node->esq);
-    else return &node;
+    if((*node)->esq) _sucessor(&(*node)->esq);
+    else return node;
 }
+
 /* balanceamento */
 void _rebalancear(Node ** node) {
     int fb = _altura((*node)->esq) - _altura((*node)->dir);
 
-    Node * filho = (fb == -2) ? (*node)->dir: (*node)->esq; 
+    Node * filho = (fb == -2) ? (*node)->dir : (*node)->esq; 
     
     int fbf = _altura(filho->esq) - _altura(filho->dir);
+
+    if(fb == -2) {
+        if(fbf > 0) _rd(&(*node)->dir);
+        _re(node);
+    }
+    else if (fb == 2) {
+        if(fbf < 0) _re(&(*node)->esq);
+        _rd(node);
+    }
 }
 
 void _re(Node ** node) {
@@ -38,8 +48,8 @@ void _re(Node ** node) {
     y->esq = x; 
     *node  = y;
 
-    x->h = max(altura(A),altura(B)) + 1;
-    y->h = max(altura(x),altura(C)) + 1;
+    x->h = max(_altura(A),_altura(B)) + 1;
+    y->h = max(_altura(x),_altura(C)) + 1;
 }
 
 void _rd(Node ** node) {
