@@ -1,4 +1,4 @@
-#include "..include/avl.h"
+#include "../include/avl.h"
 
 /* constrói */
 void constroi_avl(Arv * arv) {
@@ -7,48 +7,50 @@ void constroi_avl(Arv * arv) {
 
 /* auxiliares */
 int _max(int a, int b) {
-    return (a>b) ? a : b;
+    return (a > b) ? a : b;
 }
 
 int _altura(Node * node) {
-    return node ? node->h : -1;
+    return (node) ? node->h : -1;
 }
 
 Node ** _sucessor(Node ** node) {
-    Node * temp;
-    Node * aux = *node;
+    Node ** temp;
+    Node ** aux = node;
 
-    if(aux->dir) { // possui filho à direita
-        temp = aux->dir;
+    if((*aux)->dir) { // possui filho à direita
+        temp = &(*aux)->dir;
 
-        while(temp) temp = temp->esq;
+        while((*temp)->esq) temp = &(*temp)->esq;
     }
     else { // não possui filho à direita
-        temp = aux->pai;
-        while(temp && aux == temp->dir) { // encontra sucessor sem comparar item
-            aux = temp;
-            temp = temp->pai;
+        temp = &(*aux)->pai;
+        while(*temp && *aux == (*temp)->dir) { // encontra sucessor sem comparar item
+            aux = &(*temp);
+            temp = &(*temp)->pai;
         } 
     }
 
-    return &temp;
+    return temp;
 }
 
 /* balanceamento */
 void _rebalancear(Node ** node) {
     int fb = _altura((*node)->esq) - _altura((*node)->dir);
 
-    Node * filho = (fb == -2) ? (*node)->dir : (*node)->esq; 
-    
-    int fbf = _altura(filho->esq) - _altura(filho->dir);
+    if(fb == -2 || fb == 2) {
+        Node * filho = (fb == -2) ? (*node)->dir : (*node)->esq; 
+        
+        int fbf = _altura(filho->esq) - _altura(filho->dir);
 
-    if(fb == -2) {
-        if(fbf > 0) _rd(&(*node)->dir);
-        _re(node);
-    }
-    else if (fb == 2) {
-        if(fbf < 0) _re(&(*node)->esq);
-        _rd(node);
+        if(fb == -2) {
+            if(fbf > 0) _rd(&(*node)->dir);
+            _re(node);
+        }
+        else if (fb == 2) {
+            if(fbf < 0) _re(&(*node)->esq);
+            _rd(node);
+        }
     }
 }
 
@@ -60,15 +62,15 @@ void _re(Node ** node) {
     Node * C = y->dir;
 
     x->dir = B;
-    y->esq = x; 
+    y->esq = x;
     *node  = y;
 
     y->pai = x->pai;
     x->pai = y;
-    B->pai = x;
+    if(B) B->pai = x;
 
-    x->h = max(_altura(A),_altura(B)) + 1;
-    y->h = max(_altura(x),_altura(C)) + 1;
+    x->h = _max(_altura(A),_altura(B)) + 1;
+    y->h = _max(_altura(x),_altura(C)) + 1;
 }
 
 void _rd(Node ** node) {
@@ -84,10 +86,10 @@ void _rd(Node ** node) {
 
     x->pai = y->pai;
     y->pai = x;
-    B->pai = y;
+    if(B) B->pai = y;
 
-    x->h = max(_altura(A),_altura(y)) + 1;
-    y->h = max(_altura(B),_altura(C)) + 1;
+    x->h = _max(_altura(A),_altura(y)) + 1;
+    y->h = _max(_altura(B),_altura(C)) + 1;
 }
 
 /* inserção */
@@ -107,8 +109,8 @@ void _insere(Node ** node, Node * pai, int reg) {
         (*node)->regs->item = reg; 
         (*node)->regs->prox = NULL; 
     }
-    else if(reg > (*node)->regs->item) _insere(&(*node)->dir, node, reg);
-    else if(reg < (*node)->regs->item) _insere(&(*node)->esq, node, reg);
+    else if(reg > (*node)->regs->item) _insere(&(*node)->dir, *node, reg);
+    else if(reg < (*node)->regs->item) _insere(&(*node)->esq, *node, reg);
     else {
         Reg * aux = (*node)->regs;
 
@@ -162,14 +164,16 @@ void exibe_avl(Arv * arv) {
 }
 
 void _exibe(Node * node) {
-    _exibe(node->esq);
+    if(node) {
+        _exibe(node->esq);
 
-    Reg * aux = node->regs;
+        Reg * aux = node->regs;
 
-    while(aux) {
-        printf("%d ", aux->item);
-        aux = aux->prox;
+        while(aux) {
+            printf("%d ", aux->item);
+            aux = aux->prox;
+        }
+
+        _exibe(node->dir);
     }
-
-    _exibe(node->dir);
 }
