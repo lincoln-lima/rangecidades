@@ -15,8 +15,23 @@ int _altura(Node * node) {
 }
 
 Node ** _sucessor(Node ** node) {
-    if((*node)->esq) _sucessor(&(*node)->esq);
-    else return node;
+    Node * temp;
+    Node * aux = *node;
+
+    if(aux->dir) { // possui filho à direita
+        temp = aux->dir;
+
+        while(temp) temp = temp->esq;
+    }
+    else { // não possui filho à direita
+        temp = aux->pai;
+        while(temp && aux == temp->dir) { // encontra sucessor sem comparar item
+            aux = temp;
+            temp = temp->pai;
+        } 
+    }
+
+    return &temp;
 }
 
 /* balanceamento */
@@ -48,6 +63,10 @@ void _re(Node ** node) {
     y->esq = x; 
     *node  = y;
 
+    y->pai = x->pai;
+    x->pai = y;
+    B->pai = x;
+
     x->h = max(_altura(A),_altura(B)) + 1;
     y->h = max(_altura(x),_altura(C)) + 1;
 }
@@ -63,19 +82,94 @@ void _rd(Node ** node) {
     x->dir = y;
     *node  = x;
 
+    x->pai = y->pai;
+    y->pai = x;
+    B->pai = y;
+
     x->h = max(_altura(A),_altura(y)) + 1;
     y->h = max(_altura(B),_altura(C)) + 1;
 }
 
 /* inserção */
-void insere_avl(Arv * arv, int num);
-void _insere(Node ** node, int num);
+void insere_avl(Arv * arv, int reg) {
+    _insere(&arv->raiz, NULL, reg);
+}
+
+void _insere(Node ** node, Node * pai, int reg) {
+    if(!*node) {
+        *node = (Node *) malloc(sizeof(Node));
+        (*node)->esq = NULL;
+        (*node)->dir = NULL;
+        (*node)->pai = pai;
+        (*node)->h = 0;
+
+        (*node)->regs = (Reg *) malloc(sizeof(Reg));
+        (*node)->regs->item = reg; 
+        (*node)->regs->prox = NULL; 
+    }
+    else if(reg > (*node)->regs->item) _insere(&(*node)->dir, node, reg);
+    else if(reg < (*node)->regs->item) _insere(&(*node)->esq, node, reg);
+    else {
+        Reg * aux = (*node)->regs;
+
+        while(aux) aux = aux->prox;
+        
+        aux = (Reg *) malloc(sizeof(Reg));
+        aux->item = reg;
+        aux->prox = NULL;
+    }
+
+    (*node)->h = _max(_altura((*node)->dir), _altura((*node)->esq)) + 1;
+    _rebalancear(node);
+}
 /* busca */
-int busca_avl(Arv * arv, int num);
-int _busca(Node ** node, int num);
+Reg * busca_avl(Arv * arv, int reg) {
+    return _busca(&arv->raiz, reg);
+}
+
+Reg * _busca(Node ** node, int reg) {
+    Reg * ret;
+
+    if(!*node) ret = NULL;
+    else if(reg > (*node)->regs->item) _busca(&(*node)->dir, reg);
+    else if(reg > (*node)->regs->item) _busca(&(*node)->dir, reg);
+    else ret = (*node)->regs;
+
+    return ret;
+}
 /* destrói */
-void libera_avl(Arv * arv);
-void _libera(Node * node);
+void libera_avl(Arv * arv) {
+    _libera(arv->raiz);
+}
+
+void _libera(Node * node) {
+    if(node) {
+        _libera(node->esq);
+        _libera(node->dir);
+
+        while(node->regs) {
+            Reg * aux = node->regs;
+            node->regs = node->regs->prox;
+            free(aux);
+        }
+
+        free(node);
+    }
+}
 /* printa*/
-void exibe_avl(Arv * arv);
-void _exibe(Node * node);
+void exibe_avl(Arv * arv) {
+    _exibe(arv->raiz);
+}
+
+void _exibe(Node * node) {
+    _exibe(node->esq);
+
+    Reg * aux = node->regs;
+
+    while(aux) {
+        printf("%d ", aux->item);
+        aux = aux->prox;
+    }
+
+    _exibe(node->dir);
+}
