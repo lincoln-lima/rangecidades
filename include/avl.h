@@ -3,12 +3,12 @@
 #include<stdio.h>
 #include<stdlib.h>
 typedef struct _reg{
-    void * item;
+    int item;
     struct _reg * prox;
-} Regs;
+} Reg;
 
 typedef struct _node {
-    Regs * regs;
+    Reg * regs;
     int h;
     struct _node * pai;
     struct _node * esq;
@@ -30,11 +30,11 @@ void _rebalancear(Node ** node);
 void _re(Node ** node);
 void _rd(Node ** node);
 /* inserção */
-void insere_avl(Arv * arv, void * reg);
-void _insere(Node ** node, void * reg);
+void insere_avl(Arv * arv, int reg);
+void _insere(Node ** node, int reg);
 /* busca */
-int busca_avl(Arv * arv, void * reg);
-int _busca(Node ** node, void * reg);
+Reg * busca_avl(Arv * arv, int reg);
+Reg * _busca(Node ** node, int reg);
 /* destrói */
 void libera_avl(Arv * arv);
 void _libera(Node * node);
