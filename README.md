@@ -1,6 +1,4 @@
-# Tarefa 1: (adaptação da AVL)
-
+# Tarefa 2 (construção das avls)
 ## Descrição:
-- [x] (1.1) Adapte o código de AVL dado em sala para que os nodes possuam ponteiro para o pai.
-- [x] (1.2) Cada nó da árvore deve ter uma lista encadeada que armazena os registros com chaves iguais (um nó pode ter dois ou mais registros).
-- [x] (1.3) Implemente a função de sucessor de um nó que consiga olhar para os ancestrais (veja o código de sucessor no livro do Cormem), esta funcionalidade irá permitir fazer o range query. 
+Construa uma AVL para cada um dos seguintes campos como chave da busca:  "nome", "latitude","longitude","codigo_uf" e "ddd".
+Deste modo você terá que instanciar cinco AVLs, uma para cada campo. O registro armazenado deve conter a chave de busca + o código_ibge.
