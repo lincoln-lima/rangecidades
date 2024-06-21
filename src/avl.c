@@ -33,8 +33,6 @@ Node ** _sucessor(Node ** node) {
                 temp = &(*temp)->pai;
             } 
         }
-        
-        printf("sucessor: %d\n", (*temp)->regs->item);
     }
 
     return temp;
@@ -99,11 +97,11 @@ void _rd(Node ** node) {
 }
 
 /* inserção */
-void insere_avl(Arv * arv, int reg) {
-    _insere(&arv->raiz, NULL, reg);
+void insere_avl(Arv * arv, void * chave, int cod_ibge) {
+    _insere(&arv->raiz, NULL, chave, cod_ibge);
 }
 
-void _insere(Node ** node, Node * pai, int reg) {
+void _insere(Node ** node, Node * pai, void * chave, int cod_ibge) {
     if(!*node) {
         *node = (Node *) malloc(sizeof(Node));
         (*node)->esq = NULL;
@@ -112,19 +110,25 @@ void _insere(Node ** node, Node * pai, int reg) {
         (*node)->h = 0;
 
         (*node)->regs = (Reg *) malloc(sizeof(Reg));
-        (*node)->regs->item = reg; 
+        (*node)->regs->chave = chave; 
+        (*node)->regs->cod_ibge = cod_ibge;
         (*node)->regs->prox = NULL; 
     }
-    else if(reg > (*node)->regs->item) _insere(&(*node)->dir, *node, reg);
-    else if(reg < (*node)->regs->item) _insere(&(*node)->esq, *node, reg);
     else {
-        Reg * aux = (*node)->regs;
+        cmp = *((int *) chave) - *((int *) (*node)->regs->chave);
 
-        while(aux->prox) aux = aux->prox;
-        
-        aux->prox = (Reg *) malloc(sizeof(Reg));
-        aux->prox->item = reg;
-        aux->prox->prox = NULL;
+        if(cmp > 0) _insere(&(*node)->dir, *node, chave, cod_ibge);
+        else if(cmp < 0) _insere(&(*node)->esq, *node, chave, cod_ibge);
+        else {
+            Reg * aux = (*node)->regs;
+
+            while(aux->prox) aux = aux->prox;
+            
+            aux->prox = (Reg *) malloc(sizeof(Reg));
+            aux->prox->chave = chave;
+            aux->prox->cod_ibge = cod_ibge;
+            aux->prox->prox = NULL;
+        }
     }
 
     (*node)->h = _max(_altura((*node)->dir), _altura((*node)->esq)) + 1;
