@@ -34,7 +34,7 @@ void insere_avl(Arv * arv, int reg);
 void _insere(Node ** node, Node * pai, int reg);
 /* busca */
 Reg * busca_avl(Arv * arv, int reg);
-Reg * _busca(Node ** node, int reg);
+Reg * _busca(Node * node, int reg);
 /* destrói */
 void libera_avl(Arv * arv);
 void _libera(Node * node);
