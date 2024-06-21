@@ -38,7 +38,7 @@ Reg * _busca(Node * node, int reg);
 /* destrói */
 void libera_avl(Arv * arv);
 void _libera(Node * node);
-/* printa*/
+/* printa */
 void exibe_avl(Arv * arv);
 void _exibe(Node * node);
 #endif
