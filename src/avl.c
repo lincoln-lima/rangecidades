@@ -15,20 +15,26 @@ int _altura(Node * node) {
 }
 
 Node ** _sucessor(Node ** node) {
-    Node ** temp;
-    Node ** aux = node;
+    Node ** temp = NULL;
 
-    if((*aux)->dir) { // possui filho à direita
-        temp = &(*aux)->dir;
+    if(*node) {
+        Node ** aux = node;
 
-        while((*temp)->esq) temp = &(*temp)->esq;
-    }
-    else { // não possui filho à direita
-        temp = &(*aux)->pai;
-        while(*temp && *aux == (*temp)->dir) { // encontra sucessor sem comparar item
-            aux = &(*temp);
-            temp = &(*temp)->pai;
-        } 
+        if((*aux)->dir) { // possui filho à direita
+            temp = &(*aux)->dir;
+
+            while((*temp)->esq) temp = &(*temp)->esq;
+        }
+        else { // não possui filho à direita
+            temp = &(*aux)->pai;
+
+            while(*temp && *aux == (*temp)->dir) { // encontra sucessor sem comparar item
+                aux = &(*temp);
+                temp = &(*temp)->pai;
+            } 
+        }
+        
+        printf("sucessor: %d\n", (*temp)->regs->item);
     }
 
     return temp;
@@ -114,31 +120,31 @@ void _insere(Node ** node, Node * pai, int reg) {
     else {
         Reg * aux = (*node)->regs;
 
-        while(aux) aux = aux->prox;
+        while(aux->prox) aux = aux->prox;
         
-        aux = (Reg *) malloc(sizeof(Reg));
-        aux->item = reg;
-        aux->prox = NULL;
+        aux->prox = (Reg *) malloc(sizeof(Reg));
+        aux->prox->item = reg;
+        aux->prox->prox = NULL;
     }
 
     (*node)->h = _max(_altura((*node)->dir), _altura((*node)->esq)) + 1;
     _rebalancear(node);
 }
+
 /* busca */
 Reg * busca_avl(Arv * arv, int reg) {
-    return _busca(&arv->raiz, reg);
+    return _busca(arv->raiz, reg);
 }
 
-Reg * _busca(Node ** node, int reg) {
-    Reg * ret;
-
-    if(!*node) ret = NULL;
-    else if(reg > (*node)->regs->item) _busca(&(*node)->dir, reg);
-    else if(reg > (*node)->regs->item) _busca(&(*node)->dir, reg);
-    else ret = (*node)->regs;
-
-    return ret;
+Reg * _busca(Node * node, int reg) {
+    if(node) {
+        if(reg > node->regs->item) _busca(node->dir, reg);
+        else if(reg < node->regs->item) _busca(node->esq, reg);
+        else return node->regs;
+    }
+    else return NULL;
 }
+
 /* destrói */
 void libera_avl(Arv * arv) {
     _libera(arv->raiz);
@@ -161,6 +167,7 @@ void _libera(Node * node) {
 /* printa*/
 void exibe_avl(Arv * arv) {
     _exibe(arv->raiz);
+    printf("\n");
 }
 
 void _exibe(Node * node) {
