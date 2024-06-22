@@ -1,7 +1,7 @@
 #include "../include/mun.h"
 
 //a partir da passagem de parâmetros, constrói um "objeto" Município
-void * aloca_mun(int ibge, char * nome, double latitude, double longitude, int capital, int uf, int id, int ddd, char * fuso) {
+Mun * aloca_mun(int ibge, char * nome, double latitude, double longitude, int capital, int uf, int id, int ddd, char * fuso) {
     Mun * mun = malloc(sizeof(Mun));
 
     mun->cod_ibge = ibge;
@@ -37,4 +37,16 @@ void exibe_mun(void * cid) {
     printf("ddd: %d\n", mun->ddd);
     printf("fuso_horario: %s\n", mun->fuso);
     printf("\n");
+}
+
+int cmp_int(void * a, void * b) {
+    return *((int *) a) - *((int *) b);
+}
+
+int cmp_double(void * a, void * b) {
+    return (int) *((double *) a) - *((double *) b);
+}
+
+int cmp_str(void * a, void * b) {
+    return strcmp((char *) a, (char *) b);
 }

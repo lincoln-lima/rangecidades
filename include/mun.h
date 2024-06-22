@@ -1,5 +1,5 @@
-#ifndef __MUNICIPIO__
-#define __MUNICIPIO__
+#ifndef __MUN__
+#define __MUN__
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,7 +14,10 @@ typedef struct {
     char fuso[50];
 } Mun;
 
-void * aloca_mun(int ibge, char * nome, double latitude, double longitude, int capital, int uf, int id, int ddd, char * fuso);
+Mun * aloca_mun(int ibge, char * nome, double latitude, double longitude, int capital, int uf, int id, int ddd, char * fuso);
 int get_key_mun(void * mun);
 void exibe_mun(void * cid);
+int cmp_int(void * a, void * b);
+int cmp_double(void * a, void * b);
+int cmp_str(void * a, void * b);
 #endif
