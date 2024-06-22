@@ -18,10 +18,11 @@ typedef struct _node {
 
 typedef struct {
     Node * raiz;
+    int (* cmp)(void *, void *);
 } Arv;
 
 /* constrói */
-void constroi_avl(Arv * arv);
+void constroi_avl(Arv * arv, int (*cmp)(void *, void *));
 /* auxiliares */
 int _max(int a, int b);
 int _altura(Node * node);
@@ -32,10 +33,10 @@ void _re(Node ** node);
 void _rd(Node ** node);
 /* inserção */
 void insere_avl(Arv * arv, void * chave, int cod_ibge);
-void _insere(Node ** node, Node * pai, void * chave, int cod_ibge);
+void _insere(Arv * arv, Node ** node, Node * pai, void * chave, int cod_ibge);
 /* busca */
-Reg * busca_avl(Arv * arv, void * reg);
-Reg * _busca(Node * node, void * reg);
+Reg * busca_avl(Arv * arv, void * chave);
+Reg * _busca(Arv * arv, Node * node, void * chave);
 /* destrói */
 void libera_avl(Arv * arv);
 void _libera(Node * node);

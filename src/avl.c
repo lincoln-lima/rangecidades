@@ -1,8 +1,9 @@
 #include "../include/avl.h"
 
 /* constrói */
-void constroi_avl(Arv * arv) {
+void constroi_avl(Arv * arv, int (* cmp)(void *, void *)) {
     arv->raiz = NULL;
+    arv->cmp = cmp;
 }
 
 /* auxiliares */
@@ -28,7 +29,7 @@ Node ** _sucessor(Node ** node) {
         else { // não possui filho à direita
             temp = &(*aux)->pai;
 
-            while(*temp && *aux == (*temp)->dir) { // encontra sucessor sem comparar item
+            while(*temp && *aux == (*temp)->dir) { // encontra sucessor sem comparar chave
                 aux = &(*temp);
                 temp = &(*temp)->pai;
             } 
@@ -98,10 +99,10 @@ void _rd(Node ** node) {
 
 /* inserção */
 void insere_avl(Arv * arv, void * chave, int cod_ibge) {
-    _insere(&arv->raiz, NULL, chave, cod_ibge);
+    _insere(arv, &arv->raiz, NULL, chave, cod_ibge);
 }
 
-void _insere(Node ** node, Node * pai, void * chave, int cod_ibge) {
+void _insere(Arv * arv, Node ** node, Node * pai, void * chave, int cod_ibge) {
     if(!*node) {
         *node = (Node *) malloc(sizeof(Node));
         (*node)->esq = NULL;
@@ -115,10 +116,10 @@ void _insere(Node ** node, Node * pai, void * chave, int cod_ibge) {
         (*node)->regs->prox = NULL; 
     }
     else {
-        cmp = *((int *) chave) - *((int *) (*node)->regs->chave);
+        int cmp = arv->cmp(chave, (*node)->regs->chave);
 
-        if(cmp > 0) _insere(&(*node)->dir, *node, chave, cod_ibge);
-        else if(cmp < 0) _insere(&(*node)->esq, *node, chave, cod_ibge);
+        if(cmp > 0) _insere(arv, &(*node)->dir, *node, chave, cod_ibge);
+        else if(cmp < 0) _insere(arv, &(*node)->esq, *node, chave, cod_ibge);
         else {
             Reg * aux = (*node)->regs;
 
@@ -136,14 +137,16 @@ void _insere(Node ** node, Node * pai, void * chave, int cod_ibge) {
 }
 
 /* busca */
-Reg * busca_avl(Arv * arv, int reg) {
-    return _busca(arv->raiz, reg);
+Reg * busca_avl(Arv * arv, void * chave) {
+    return _busca(arv, arv->raiz, chave);
 }
 
-Reg * _busca(Node * node, int reg) {
+Reg * _busca(Arv * arv, Node * node, void * chave) {
     if(node) {
-        if(reg > node->regs->item) _busca(node->dir, reg);
-        else if(reg < node->regs->item) _busca(node->esq, reg);
+        int cmp = arv->cmp(chave, node->regs->chave);
+
+        if(cmp > 0) _busca(arv, node->dir, chave);
+        else if(cmp < 0) _busca(arv, node->esq, chave);
         else return node->regs;
     }
     else return NULL;
@@ -168,6 +171,7 @@ void _libera(Node * node) {
         free(node);
     }
 }
+
 /* printa*/
 void exibe_avl(Arv * arv) {
     _exibe(arv->raiz);
@@ -181,7 +185,7 @@ void _exibe(Node * node) {
         Reg * aux = node->regs;
 
         while(aux) {
-            printf("%d ", aux->item);
+            printf("%d ", aux->cod_ibge);
             aux = aux->prox;
         }
 
