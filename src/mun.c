@@ -44,7 +44,7 @@ int cmp_int(void * a, void * b) {
 }
 
 int cmp_double(void * a, void * b) {
-    return (int) *((double *) a) - *((double *) b);
+    return (int) (*((double *) a)) - (int) (*((double *) b));
 }
 
 int cmp_str(void * a, void * b) {
