@@ -35,8 +35,12 @@ int main() {
 
         if(op == 1) {
             int eq;
+            int * ret;
+            int * lats, * lons, * ddds;
 
             for(int i = 1; i <= 3; i++) {
+                printf("\n");
+
                 switch(i) {
                     case 1:
                         double lat;
@@ -49,12 +53,12 @@ int main() {
 
                         eq = (eq == 2) ? -1 : eq;
 
-                        Reg * lats = query(&arvMunLat, &lat, eq);
+                        lats = query_simp_avl(&arvMunLat, &lat, eq);
                     break;
                     case 2:
                         double lon;
 
-                        printf("Longitude:\n");
+                        printf("Longitude: ");
                         scanf("%lf", &lon);
 
                         printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
@@ -62,12 +66,12 @@ int main() {
 
                         eq = (eq == 2) ? -1 : eq;
 
-                        Reg * lats = query(&arvMunLon, &lon, eq);
+                        lons = query_simp_avl(&arvMunLon, &lon, eq);
                     break;
                     case 3:
                         int ddd;
 
-                        printf("DDD:\n");
+                        printf("DDD: ");
                         scanf("%d", &ddd);
 
                         printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
@@ -75,12 +79,20 @@ int main() {
 
                         eq = (eq == 2) ? -1 : eq;
 
-                        Reg * lats = query(&arvMunDDD, &ddd, eq);
+                        ddds = query_simp_avl(&arvMunDDD, &ddd, eq);
                     break;
                 }
             }
+            
+            ret = query_comb_avl(lats, lons);
+            ret = query_comb_avl(ret, ddds);
+
+            int qtd = 0;
+            for(int * pret = ret; pret < ret + QTD_MUNICIPIOS && *pret != 0; pret++) printf("%d: %d\n", ++qtd, *pret);
+            
+            free(ret);
         }
-        else if(op == 0) printf("Encerrando execução...\n")
+        else if(op == 0) printf("Encerrando execução...\n");
         else printf("INVÁLIDA!!!\n");
 
     } while(op != 0);
@@ -103,7 +115,6 @@ void menu(int * op) {
     printf("1 - Realizar\n");
     printf("\nOpção: ");
     scanf("%d", op);
-    printf("\n");
 }
 
 //informe o json JSENSE e a posição do município no arquivo
