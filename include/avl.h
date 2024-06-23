@@ -44,6 +44,7 @@ void _libera(Node * node);
 void exibe_avl(Arv * arv);
 void _exibe(Node * node);
 /* queries */
-Reg * query_simp_avl(Arv * arv, void * chave, int eq);
-Reg * query_comb_avl(Arv * arv, Reg * regs1, Reg * regs2);
+int * query_simp_avl(Arv * arv, void * chave, int eq);
+void _salva_ret(int * pret, Reg * reg);
+int * query_comb_avl(int * regs1, int * regs2);
 #endif

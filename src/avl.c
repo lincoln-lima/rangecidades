@@ -172,7 +172,7 @@ void _libera(Node * node) {
     }
 }
 
-/* printa*/
+/* printa */
 void exibe_avl(Arv * arv) {
     _exibe(arv->raiz);
     printf("\n");
@@ -193,20 +193,79 @@ void _exibe(Node * node) {
     }
 }
 
-Reg * query_simp_avl(Arv * arv, void * chave, int eq) {
-    Reg * ret;
+/* queries */
+int * query_simp_avl(Arv * arv, void * chave, int eq) {
+    int * ret = (int *) calloc(5570, sizeof(int));
+    int * pret = ret;
+    int cmp;
+
+    Node * aux = arv->raiz;
+    Reg * reg;
 
     if(eq > 0) {
+        Node * temp = NULL;
+        
+        do {
+            if(temp) aux = temp;
 
+            cmp = arv->cmp(chave, aux->regs->chave);
+            
+            if(cmp > 0) temp = aux->dir;
+            else if(cmp < 0) temp = aux->esq; 
+            else temp = NULL;
+        } while(temp);
+
+        while(aux) {
+            reg = aux->regs;
+            
+            _salva_ret(pret, reg);
+
+            aux = *(_sucessor(&aux));
+        }
     }
     else if(eq < 0) {
+        while(aux->esq) aux = aux->esq;
+        
+        do {
+            cmp = arv->cmp(chave, aux->regs->chave);
 
+            if(cmp > 0) {
+                reg = aux->regs;
+
+                _salva_ret(pret, reg);
+
+                aux = *(_sucessor(&aux));
+            }
+        } while(cmp > 0); 
     }
-    else ret = busca_avl(arv, chave);
+    else {
+        reg = busca_avl(arv, chave);
+        _salva_ret(pret, reg);
+    }
 
     return ret;
 }
 
-Reg * query_comb_avl(Arv * arv, Reg * regs1, Reg * regs2) {
+void _salva_ret(int * pret, Reg * reg) {
+    while(reg) {
+        *pret++ = reg->cod_ibge; 
+        reg = reg->prox;
+    } 
+}
 
+int * query_comb_avl(int * regs1, int * regs2) {
+    int * ret = (int *) calloc(5571, sizeof(int));
+    int * pret = ret;
+
+    for(int * aux1 = regs1; aux1 < regs1 + 5570 && *aux1 != 0; aux1++) {
+        int * aux2;
+        for(aux2 = regs2; aux2 < regs2 + 5570 && *aux2 != 0 && *aux1 != *aux2; aux2++); 
+
+        if(*aux1 == *aux2) *pret++ = *aux1;
+    }
+
+    free(regs1);
+    free(regs2);
+
+    return ret;
 }
