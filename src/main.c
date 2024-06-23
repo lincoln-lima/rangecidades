@@ -12,27 +12,19 @@ void menu(int * op);
 int main() {
 	JSENSE * arq = jse_from_file("./files/municipios.json");
 
-	Arv arvMunNome;
-	constroi_avl(&arvMunNome, cmp_str);
-
 	Arv arvMunLat;
 	constroi_avl(&arvMunLat, cmp_double);
 
 	Arv arvMunLon;
 	constroi_avl(&arvMunLon, cmp_double);
 
-	Arv arvMunUF;
-	constroi_avl(&arvMunUF, cmp_int);
-
 	Arv arvMunDDD;
 	constroi_avl(&arvMunDDD, cmp_int);
 
 	for(int i = 0; i < QTD_MUNICIPIOS; i++) {
         Mun * mun = acessa_mun_json(arq, i);
-		insere_avl(&arvMunNome, &mun->nome, mun->cod_ibge);
 		insere_avl(&arvMunLat, &mun->coord[0], mun->cod_ibge);
 		insere_avl(&arvMunLon, &mun->coord[1], mun->cod_ibge);
-		insere_avl(&arvMunUF, &mun->cod_uf, mun->cod_ibge);
 		insere_avl(&arvMunDDD, &mun->ddd, mun->cod_ibge);
 	}
 
@@ -41,98 +33,60 @@ int main() {
     do {
         menu(&op);
 
-        Reg * aux;
+        if(op == 1) {
+            int eq;
 
-        printf("\n");
+            for(int i = 1; i <= 3; i++) {
+                switch(i) {
+                    case 1:
+                        double lat;
 
-        switch(op) {
-            case 0:
-                printf("Encerrando execução...\n");
-            break;
-            case 1:
-                char nome[35];
+                        printf("Latitude: ");
+                        scanf("%lf", &lat);
 
-                printf("Nome: ");
-                scanf(" %[^\n]", nome);
+                        printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
+                        scanf("%d", &eq);
 
-                aux = busca_avl(&arvMunNome, nome);
-                
-                printf("\n");
+                        eq = (eq == 2) ? -1 : eq;
 
-                while(aux) {
-                    printf("IBGE: %d -> %s\n", aux->cod_ibge, (char *) aux->chave);
-                    aux = aux->prox;
+                        Reg * lats = query(&arvMunLat, &lat, eq);
+                    break;
+                    case 2:
+                        double lon;
+
+                        printf("Longitude:\n");
+                        scanf("%lf", &lon);
+
+                        printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
+                        scanf("%d", &eq);
+
+                        eq = (eq == 2) ? -1 : eq;
+
+                        Reg * lats = query(&arvMunLon, &lon, eq);
+                    break;
+                    case 3:
+                        int ddd;
+
+                        printf("DDD:\n");
+                        scanf("%d", &ddd);
+
+                        printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
+                        scanf("%d", &eq);
+
+                        eq = (eq == 2) ? -1 : eq;
+
+                        Reg * lats = query(&arvMunDDD, &ddd, eq);
+                    break;
                 }
-            break;
-            case 2:
-                double lat;
-
-                printf("Latitude: ");
-                scanf("%lf", &lat);
-
-                aux = busca_avl(&arvMunLat, &lat);
-
-                printf("\n");
-
-                while(aux) {
-                    printf("IBGE: %d -> %lf\n", aux->cod_ibge, *((double *) aux->chave));
-                    aux = aux->prox;
-                }
-            break;
-            case 3:
-                double lon;
-
-                printf("Longitude: ");
-                scanf("%lf", &lon);
-
-                aux = busca_avl(&arvMunLon, &lon);
-                
-                printf("\n");
-
-                while(aux) {
-                    printf("IBGE: %d -> %lf\n", aux->cod_ibge, *((double *) aux->chave));
-                    aux = aux->prox;
-                }
-            break;
-            case 4:
-                int uf;
-
-                printf("UF: ");
-                scanf("%d", &uf);
-
-                aux = busca_avl(&arvMunUF, &uf);
-
-                printf("\n");
-
-                while(aux) {
-                    printf("IBGE: %d -> %d\n", aux->cod_ibge, *((int *) aux->chave));
-                    aux = aux->prox;
-                }
-            break;
-            case 5:
-                int ddd;
-
-                printf("DDD: ");
-                scanf("%d", &ddd);
-
-                aux = busca_avl(&arvMunDDD, &ddd);
-                
-                printf("\n");
-
-                while(aux) {
-                    printf("IBGE: %d -> %d\n", aux->cod_ibge, *((int *) aux->chave));
-                    aux = aux->prox;
-                }
-            break;
-            default:
-                printf("INVÁLIDA!!!\n");
+            }
         }
+        else if(op == 0) printf("Encerrando execução...\n")
+        else printf("INVÁLIDA!!!\n");
+
     } while(op != 0);
     
-    libera_avl(&arvMunNome);
     libera_avl(&arvMunLat);
     libera_avl(&arvMunLon);
-    libera_avl(&arvMunUF);
     libera_avl(&arvMunDDD);
 
     jse_free(arq);
@@ -144,15 +98,12 @@ int main() {
 void menu(int * op) {
     printf("----------------------------------------------------\n");
     printf("INFORME\n");
-    printf("Busca de munícipios por\n");
+    printf("Busca de munícipios por queries\n");
     printf("0 - Encerrar\n");
-    printf("1 - Nome\n");
-    printf("2 - Latitude\n");
-    printf("3 - Longitude\n");
-    printf("4 - UF\n");
-    printf("5 - DDD\n");
+    printf("1 - Realizar\n");
     printf("\nOpção: ");
     scanf("%d", op);
+    printf("\n");
 }
 
 //informe o json JSENSE e a posição do município no arquivo
