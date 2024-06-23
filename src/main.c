@@ -7,6 +7,7 @@
 #define QTD_MUNICIPIOS 5570
 
 Mun * acessa_mun_json(JSENSE * arq, int pos);
+void menu(int * op);
 
 int main() {
 	JSENSE * arq = jse_from_file("./files/municipios.json");
@@ -38,17 +39,7 @@ int main() {
     int op;
 
     do {
-        printf("----------------------------------------------------\n");
-        printf("INFORME\n");
-        printf("Busca de munícipios por\n");
-        printf("1 - Nome\n");
-        printf("2 - Latitude\n");
-        printf("3 - Longitude\n");
-        printf("4 - UF\n");
-        printf("5 - DDD\n");
-        printf("0 - Encerrar\n");
-        printf("\nOpção: ");
-        scanf("%d", &op);
+        menu(&op);
 
         Reg * aux;
 
@@ -147,6 +138,21 @@ int main() {
     jse_free(arq);
 
     return EXIT_SUCCESS;
+}
+
+//menu
+void menu(int * op) {
+    printf("----------------------------------------------------\n");
+    printf("INFORME\n");
+    printf("Busca de munícipios por\n");
+    printf("0 - Encerrar\n");
+    printf("1 - Nome\n");
+    printf("2 - Latitude\n");
+    printf("3 - Longitude\n");
+    printf("4 - UF\n");
+    printf("5 - DDD\n");
+    printf("\nOpção: ");
+    scanf("%d", op);
 }
 
 //informe o json JSENSE e a posição do município no arquivo
