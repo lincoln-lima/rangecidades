@@ -192,3 +192,21 @@ void _exibe(Node * node) {
         _exibe(node->dir);
     }
 }
+
+Reg * query_simp_avl(Arv * arv, void * chave, int eq) {
+    Reg * ret;
+
+    if(eq > 0) {
+
+    }
+    else if(eq < 0) {
+
+    }
+    else ret = busca_avl(arv, chave);
+
+    return ret;
+}
+
+Reg * query_comb_avl(Arv * arv, Reg * regs1, Reg * regs2) {
+
+}
