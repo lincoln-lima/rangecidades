@@ -19,10 +19,10 @@ typedef struct _node {
 typedef struct {
     Node * raiz;
     int (* cmp)(void *, void *);
-} Arv;
+} ArvAVL;
 
 /* constrói */
-void constroi_avl(Arv * arv, int (*cmp)(void *, void *));
+void constroi_avl(ArvAVL * arv, int (*cmp)(void *, void *));
 /* auxiliares */
 int _max(int a, int b);
 int _altura(Node * node);
@@ -33,19 +33,19 @@ void _rebalancear(Node ** node);
 void _re(Node ** node);
 void _rd(Node ** node);
 /* inserção */
-void insere_avl(Arv * arv, void * chave, int cod_ibge);
-void _insere(Arv * arv, Node ** node, Node * pai, void * chave, int cod_ibge);
+void insere_avl(ArvAVL * arv, void * chave, int cod_ibge);
+void _insere(ArvAVL * arv, Node ** node, Node * pai, void * chave, int cod_ibge);
 /* busca */
-Reg * busca_avl(Arv * arv, void * chave);
-Reg * _busca(Arv * arv, Node * node, void * chave);
+Reg * busca_avl(ArvAVL * arv, void * chave);
+Reg * _busca(ArvAVL * arv, Node * node, void * chave);
 /* destrói */
-void libera_avl(Arv * arv);
+void libera_avl(ArvAVL * arv);
 void _libera(Node * node);
 /* printa */
-void exibe_avl(Arv * arv);
+void exibe_avl(ArvAVL * arv);
 void _exibe(Node * node);
 /* queries */
-int * query_simp_avl(Arv * arv, void * chave, int eq);
-void _salva_ret(int * pret, Reg * reg);
+int * query_simp_avl(ArvAVL * arv, void * chave, int eq);
+void _salva_ret(int ** pret, Reg * reg);
 int * query_comb_avl(int * regs1, int * regs2);
 #endif
