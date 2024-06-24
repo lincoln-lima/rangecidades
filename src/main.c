@@ -7,18 +7,19 @@
 #define QTD_MUNICIPIOS 5570
 
 Mun * acessa_mun_json(JSENSE * arq, int pos);
-void menu(int * op);
+void menu_op(int * op);
+void menu_range(int * eq);
 
 int main() {
 	JSENSE * arq = jse_from_file("./files/municipios.json");
 
-	Arv arvMunLat;
-	constroi_avl(&arvMunLat, cmp_double);
+	ArvAVL arvMunLat;
+	constroi_avl(&arvMunLat, cmp_float);
 
-	Arv arvMunLon;
-	constroi_avl(&arvMunLon, cmp_double);
+	ArvAVL arvMunLon;
+	constroi_avl(&arvMunLon, cmp_float);
 
-	Arv arvMunDDD;
+	ArvAVL arvMunDDD;
 	constroi_avl(&arvMunDDD, cmp_int);
 
 	for(int i = 0; i < QTD_MUNICIPIOS; i++) {
@@ -31,54 +32,38 @@ int main() {
     int op;
 
     do {
-        menu(&op);
+        menu_op(&op);
 
         if(op == 1) {
             int eq;
             int * ret;
             int * lats, * lons, * ddds;
 
-            int qtd;
+            int qtd = 0;
 
             for(int i = 1; i <= 3; i++) {
                 printf("\n");
 
                 switch(i) {
                     case 1:
-                        double lat;
+                        float lat;
 
                         printf("Latitude: ");
                         scanf("%lf", &lat);
 
-                        printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
-                        scanf("%d", &eq);
-
-                        eq = (eq == 2) ? -1 : eq;
+			menu_range(&eq);
 
                         lats = query_simp_avl(&arvMunLat, &lat, eq);
-
-                        qtd = 0;
-
-                        printf("Lats:\n");
-                        for(int * aux = lats; *aux != 0; aux++) printf("%d: %d\n", ++qtd, *aux);
                     break;
                     case 2:
-                        double lon;
+                        float lon;
 
                         printf("Longitude: ");
                         scanf("%lf", &lon);
 
-                        printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
-                        scanf("%d", &eq);
-
-                        eq = (eq == 2) ? -1 : eq;
+			menu_range(&eq);
 
                         lons = query_simp_avl(&arvMunLon, &lon, eq);
-
-                        qtd = 0;
-
-                        printf("Lons:\n");
-                        for(int * aux = lons; *aux != 0; aux++) printf("%d: %d\n", ++qtd, *aux);
                     break;
                     case 3:
                         int ddd;
@@ -86,34 +71,20 @@ int main() {
                         printf("DDD: ");
                         scanf("%d", &ddd);
 
-                        printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
-                        scanf("%d", &eq);
-
-                        eq = (eq == 2) ? -1 : eq;
+			menu_range(&eq);
 
                         ddds = query_simp_avl(&arvMunDDD, &ddd, eq);
-
-                        qtd = 0;
-
-                        printf("DDDs:\n");
-                        for(int * aux = ddds; *aux != 0; aux++) printf("%d: %d\n", ++qtd, *aux);
                     break;
                 }
             }
+	    printf("\nRetorno\n");
+
+            ret = query_comb_avl(lats, lons);
+            ret = query_comb_avl(ret, ddds);
+
+            for(int * pret = ret; pret < ret + QTD_MUNICIPIOS && *pret != 0; pret++) printf("%d: %d\n", ++qtd, *pret);
             
-            free(lats);
-            free(lons);
-            free(ddds);
-//            ret = query_comb_avl(lats, lons);
-//            ret = query_comb_avl(ret, ddds);
-//
-//            int qtd = 0;
-//            for(int * pret = ret; pret < ret + QTD_MUNICIPIOS && *pret != 0; pret++) printf("%d: %d\n", ++qtd, *pret);
-//            
-//            free(ret);
-            free(lats);
-            free(lons);
-            free(ddds);
+            free(ret);
         }
         else if(op == 0) printf("Encerrando execução...\n");
         else printf("INVÁLIDA!!!\n");
@@ -130,7 +101,7 @@ int main() {
 }
 
 //menu
-void menu(int * op) {
+void menu_op(int * op) {
     printf("----------------------------------------------------\n");
     printf("INFORME\n");
     printf("Busca de munícipios por queries\n");
@@ -138,6 +109,13 @@ void menu(int * op) {
     printf("1 - Realizar\n");
     printf("\nOpção: ");
     scanf("%d", op);
+}
+
+void menu_range(int * eq) {
+    printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
+    scanf("%d", eq);
+
+    *eq = (*eq == 2) ? -1 : *eq;
 }
 
 //informe o json JSENSE e a posição do município no arquivo
@@ -162,7 +140,7 @@ Mun * acessa_mun_json(JSENSE * arq, int pos) {
     int cod_ibge, capital, cod_uf, siafi_id, ddd;
     char nome[35];
     char fuso[50];
-    double latitude, longitude;
+    float latitude, longitude;
 
     for(int i = 0; i < 9; i++) {
 	    sprintf(operacao, "[%d].%s", pos, campos[i]);
