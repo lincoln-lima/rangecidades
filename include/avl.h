@@ -3,22 +3,22 @@
 #include<stdio.h>
 #include<stdlib.h>
 typedef struct _reg{
-	void * chave;
-	int cod_ibge;
-	struct _reg * prox;
+  void * chave;
+  int cod_ibge;
+  struct _reg * prox;
 } Reg;
 
 typedef struct _node {
-	Reg * regs;
-	int h;
-	struct _node * pai;
-	struct _node * esq;
-	struct _node * dir;
+  Reg * regs;
+  int h;
+  struct _node * pai;
+  struct _node * esq;
+  struct _node * dir;
 } Node;
 
 typedef struct {
-	Node * raiz;
-	int (* cmp)(void *, void *);
+  Node * raiz;
+  int (* cmp)(void *, void *);
 } ArvAVL;
 
 /* constrói */
