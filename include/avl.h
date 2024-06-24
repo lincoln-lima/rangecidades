@@ -3,22 +3,22 @@
 #include<stdio.h>
 #include<stdlib.h>
 typedef struct _reg{
-    void * chave;
-    int cod_ibge;
-    struct _reg * prox;
+	void * chave;
+	int cod_ibge;
+	struct _reg * prox;
 } Reg;
 
 typedef struct _node {
-    Reg * regs;
-    int h;
-    struct _node * pai;
-    struct _node * esq;
-    struct _node * dir;
+	Reg * regs;
+	int h;
+	struct _node * pai;
+	struct _node * esq;
+	struct _node * dir;
 } Node;
 
 typedef struct {
-    Node * raiz;
-    int (* cmp)(void *, void *);
+	Node * raiz;
+	int (* cmp)(void *, void *);
 } ArvAVL;
 
 /* constrói */
@@ -41,11 +41,8 @@ Reg * _busca(ArvAVL * arv, Node * node, void * chave);
 /* destrói */
 void libera_avl(ArvAVL * arv);
 void _libera(Node * node);
-/* printa */
-void exibe_avl(ArvAVL * arv);
-void _exibe(Node * node);
 /* queries */
-int * query_simp_avl(ArvAVL * arv, void * chave, int eq);
+int * query_simp_avl(ArvAVL * arv, void * chave, int eq, int tam);
 void _salva_ret(int ** pret, Reg * reg);
-int * query_comb_avl(int * regs1, int * regs2);
+int * query_comb_avl(int * regs1, int * regs2, int tam);
 #endif
