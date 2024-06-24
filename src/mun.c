@@ -1,7 +1,7 @@
 #include "../include/mun.h"
 
 //a partir da passagem de parâmetros, constrói um "objeto" Município
-Mun * aloca_mun(int ibge, char * nome, double latitude, double longitude, int capital, int uf, int id, int ddd, char * fuso) {
+Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capital, int uf, int id, int ddd, char * fuso) {
     Mun * mun = malloc(sizeof(Mun));
 
     mun->cod_ibge = ibge;
@@ -43,8 +43,8 @@ int cmp_int(void * a, void * b) {
     return *((int *) a) - *((int *) b);
 }
 
-int cmp_double(void * a, void * b) {
-    return (int) (*((double *) a)) - (int) (*((double *) b));
+int cmp_float(void * a, void * b) {
+    return (int) (*((float *) a)) - (int) (*((float *) b));
 }
 
 int cmp_str(void * a, void * b) {

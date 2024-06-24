@@ -6,7 +6,7 @@
 typedef struct {
     int cod_ibge;
     char nome[35];
-    double coord[2];
+    float coord[2];
     int capital;
     int cod_uf;
     int siafi_id;
@@ -14,10 +14,10 @@ typedef struct {
     char fuso[50];
 } Mun;
 
-Mun * aloca_mun(int ibge, char * nome, double latitude, double longitude, int capital, int uf, int id, int ddd, char * fuso);
+Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capital, int uf, int id, int ddd, char * fuso);
 int get_key_mun(void * mun);
 void exibe_mun(void * cid);
 int cmp_int(void * a, void * b);
-int cmp_double(void * a, void * b);
+int cmp_float(void * a, void * b);
 int cmp_str(void * a, void * b);
 #endif
