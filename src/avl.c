@@ -1,7 +1,7 @@
 #include "../include/avl.h"
 
 /* constrói */
-void constroi_avl(Arv * arv, int (* cmp)(void *, void *)) {
+void constroi_avl(ArvAVL * arv, int (* cmp)(void *, void *)) {
     arv->raiz = NULL;
     arv->cmp = cmp;
 }
@@ -122,11 +122,11 @@ void _rd(Node ** node) {
 }
 
 /* inserção */
-void insere_avl(Arv * arv, void * chave, int cod_ibge) {
+void insere_avl(ArvAVL * arv, void * chave, int cod_ibge) {
     _insere(arv, &arv->raiz, NULL, chave, cod_ibge);
 }
 
-void _insere(Arv * arv, Node ** node, Node * pai, void * chave, int cod_ibge) {
+void _insere(ArvAVL * arv, Node ** node, Node * pai, void * chave, int cod_ibge) {
     if(!*node) {
         *node = (Node *) malloc(sizeof(Node));
         (*node)->esq = NULL;
@@ -161,11 +161,11 @@ void _insere(Arv * arv, Node ** node, Node * pai, void * chave, int cod_ibge) {
 }
 
 /* busca */
-Reg * busca_avl(Arv * arv, void * chave) {
+Reg * busca_avl(ArvAVL * arv, void * chave) {
     return _busca(arv, arv->raiz, chave);
 }
 
-Reg * _busca(Arv * arv, Node * node, void * chave) {
+Reg * _busca(ArvAVL * arv, Node * node, void * chave) {
     if(node) {
         int cmp = arv->cmp(chave, node->regs->chave);
 
@@ -177,7 +177,7 @@ Reg * _busca(Arv * arv, Node * node, void * chave) {
 }
 
 /* destrói */
-void libera_avl(Arv * arv) {
+void libera_avl(ArvAVL * arv) {
     _libera(arv->raiz);
 }
 
@@ -197,7 +197,7 @@ void _libera(Node * node) {
 }
 
 /* printa */
-void exibe_avl(Arv * arv) {
+void exibe_avl(ArvAVL * arv) {
     _exibe(arv->raiz);
     printf("\n");
 }
@@ -218,8 +218,8 @@ void _exibe(Node * node) {
 }
 
 /* queries */
-int * query_simp_avl(Arv * arv, void * chave, int eq) {
-    int * ret = (int *) calloc(5570, sizeof(int));
+int * query_simp_avl(ArvAVL * arv, void * chave, int eq) {
+    int * ret = (int *) calloc(5571, sizeof(int));
     int * pret = ret;
     int cmp;
 
@@ -235,7 +235,7 @@ int * query_simp_avl(Arv * arv, void * chave, int eq) {
             if(cmp < 0) {
                 reg = aux->regs;
 
-                _salva_ret(pret, reg);
+                _salva_ret(&pret, reg);
 
                 aux = *(_antecessor(&aux));
             }
@@ -250,7 +250,7 @@ int * query_simp_avl(Arv * arv, void * chave, int eq) {
             if(cmp > 0) {
                 reg = aux->regs;
 
-                _salva_ret(pret, reg);
+                _salva_ret(&pret, reg);
 
                 aux = *(_sucessor(&aux));
             }
@@ -258,15 +258,15 @@ int * query_simp_avl(Arv * arv, void * chave, int eq) {
     }
     else {
         reg = busca_avl(arv, chave);
-        _salva_ret(pret, reg);
+        _salva_ret(&pret, reg);
     }
 
     return ret;
 }
 
-void _salva_ret(int * pret, Reg * reg) {
+void _salva_ret(int ** pret, Reg * reg) {
     while(reg) {
-        *pret++ = reg->cod_ibge; 
+        *(*pret)++ = reg->cod_ibge; 
         reg = reg->prox;
     } 
 }
