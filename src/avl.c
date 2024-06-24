@@ -39,6 +39,30 @@ Node ** _sucessor(Node ** node) {
     return temp;
 }
 
+Node ** _antecessor(Node ** node) {
+    Node ** temp = NULL;
+
+    if(*node) {
+        Node ** aux = node;
+
+        if((*aux)->esq) { // possui filho à esquerda 
+            temp = &(*aux)->esq;
+
+            while((*temp)->dir) temp = &(*temp)->dir;
+        }
+        else { // não possui filho à esquerda
+            temp = &(*aux)->pai;
+
+            while(*temp && *aux == (*temp)->esq) { // encontra antecessor sem comparar chave
+                aux = &(*temp);
+                temp = &(*temp)->pai;
+            } 
+        }
+    }
+
+    return temp;
+}
+
 /* balanceamento */
 void _rebalancear(Node ** node) {
     int fb = _altura((*node)->esq) - _altura((*node)->dir);
@@ -203,25 +227,19 @@ int * query_simp_avl(Arv * arv, void * chave, int eq) {
     Reg * reg;
 
     if(eq > 0) {
-        Node * temp = NULL;
+        while(aux->dir) aux = aux->dir;
         
         do {
-            if(temp) aux = temp;
-
             cmp = arv->cmp(chave, aux->regs->chave);
-            
-            if(cmp > 0) temp = aux->dir;
-            else if(cmp < 0) temp = aux->esq; 
-            else temp = NULL;
-        } while(temp);
 
-        while(aux) {
-            reg = aux->regs;
-            
-            _salva_ret(pret, reg);
+            if(cmp < 0) {
+                reg = aux->regs;
 
-            aux = *(_sucessor(&aux));
-        }
+                _salva_ret(pret, reg);
+
+                aux = *(_antecessor(&aux));
+            }
+        } while(aux && cmp < 0); 
     }
     else if(eq < 0) {
         while(aux->esq) aux = aux->esq;
@@ -236,7 +254,7 @@ int * query_simp_avl(Arv * arv, void * chave, int eq) {
 
                 aux = *(_sucessor(&aux));
             }
-        } while(cmp > 0); 
+        } while(aux && cmp > 0); 
     }
     else {
         reg = busca_avl(arv, chave);

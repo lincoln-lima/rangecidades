@@ -27,6 +27,7 @@ void constroi_avl(Arv * arv, int (*cmp)(void *, void *));
 int _max(int a, int b);
 int _altura(Node * node);
 Node ** _sucessor(Node ** node);
+Node ** _antecessor(Node ** node);
 /* balanceamento */
 void _rebalancear(Node ** node);
 void _re(Node ** node);

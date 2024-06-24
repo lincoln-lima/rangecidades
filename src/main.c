@@ -38,6 +38,8 @@ int main() {
             int * ret;
             int * lats, * lons, * ddds;
 
+            int qtd;
+
             for(int i = 1; i <= 3; i++) {
                 printf("\n");
 
@@ -54,6 +56,11 @@ int main() {
                         eq = (eq == 2) ? -1 : eq;
 
                         lats = query_simp_avl(&arvMunLat, &lat, eq);
+
+                        qtd = 0;
+
+                        printf("Lats:\n");
+                        for(int * aux = lats; *aux != 0; aux++) printf("%d: %d\n", ++qtd, *aux);
                     break;
                     case 2:
                         double lon;
@@ -67,6 +74,11 @@ int main() {
                         eq = (eq == 2) ? -1 : eq;
 
                         lons = query_simp_avl(&arvMunLon, &lon, eq);
+
+                        qtd = 0;
+
+                        printf("Lons:\n");
+                        for(int * aux = lons; *aux != 0; aux++) printf("%d: %d\n", ++qtd, *aux);
                     break;
                     case 3:
                         int ddd;
@@ -80,17 +92,28 @@ int main() {
                         eq = (eq == 2) ? -1 : eq;
 
                         ddds = query_simp_avl(&arvMunDDD, &ddd, eq);
+
+                        qtd = 0;
+
+                        printf("DDDs:\n");
+                        for(int * aux = ddds; *aux != 0; aux++) printf("%d: %d\n", ++qtd, *aux);
                     break;
                 }
             }
             
-            ret = query_comb_avl(lats, lons);
-            ret = query_comb_avl(ret, ddds);
-
-            int qtd = 0;
-            for(int * pret = ret; pret < ret + QTD_MUNICIPIOS && *pret != 0; pret++) printf("%d: %d\n", ++qtd, *pret);
-            
-            free(ret);
+            free(lats);
+            free(lons);
+            free(ddds);
+//            ret = query_comb_avl(lats, lons);
+//            ret = query_comb_avl(ret, ddds);
+//
+//            int qtd = 0;
+//            for(int * pret = ret; pret < ret + QTD_MUNICIPIOS && *pret != 0; pret++) printf("%d: %d\n", ++qtd, *pret);
+//            
+//            free(ret);
+            free(lats);
+            free(lons);
+            free(ddds);
         }
         else if(op == 0) printf("Encerrando execução...\n");
         else printf("INVÁLIDA!!!\n");
