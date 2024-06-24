@@ -4,19 +4,23 @@
 #include <stdlib.h>
 #include <string.h>
 typedef struct {
-    int cod_ibge;
-    char nome[35];
-    float coord[2];
-    int capital;
-    int cod_uf;
-    int siafi_id;
-    int ddd;
-    char fuso[50];
+	int cod_ibge;
+	char nome[35];
+	float coord[2];
+	int capital;
+	int cod_uf;
+	int siafi_id;
+	int ddd;
+	char fuso[50];
 } Mun;
 
+/* constroi objeto Municipio */
 Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capital, int uf, int id, int ddd, char * fuso);
+/* retorna chave do Municipio */
 int get_key_mun(void * mun);
+/* mostra todos os campos do Municipio */
 void exibe_mun(void * cid);
+/* funções de comparação */
 int cmp_int(void * a, void * b);
 int cmp_float(void * a, void * b);
 int cmp_str(void * a, void * b);

@@ -1,52 +1,53 @@
 #include "../include/mun.h"
 
-//a partir da passagem de parâmetros, constrói um "objeto" Município
+/* constroi objeto Municipio */
 Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capital, int uf, int id, int ddd, char * fuso) {
-    Mun * mun = malloc(sizeof(Mun));
+	Mun * mun = malloc(sizeof(Mun));
 
-    mun->cod_ibge = ibge;
-    strcpy(mun->nome, nome);
-    mun->coord[0]= latitude;
-    mun->coord[1]= longitude;
-    mun->capital = capital;
-    mun->cod_uf = uf;
-    mun->siafi_id = id;
-    mun->ddd = ddd;
-    strcpy(mun->fuso, fuso);
+	mun->cod_ibge = ibge;
+	strcpy(mun->nome, nome);
+	mun->coord[0]= latitude;
+	mun->coord[1]= longitude;
+	mun->capital = capital;
+	mun->cod_uf = uf;
+	mun->siafi_id = id;
+	mun->ddd = ddd;
+	strcpy(mun->fuso, fuso);
 
-    return mun;
+	return mun;
 }
 
-//define a chave de cada município
+/* retorna chave do Municipio */
 int get_key_mun(void * mun) {
-    return (*((Mun *) mun)).cod_ibge;
+	return (*((Mun *) mun)).cod_ibge;
 }
 
-//informe um ponteiro de Municipio e todas suas informações serão mostradas
+/* mostra todos os campos do Municipio */
 void exibe_mun(void * cid) {
-    Mun * mun = (Mun *) cid;
+	Mun * mun = (Mun *) cid;
 
-    printf("---------------------------------\n");
-    printf("codigo_ibge: %d\n", mun->cod_ibge);
-    printf("nome: %s\n", mun->nome);
-    printf("latitude: %f\n", mun->coord[0]);
-    printf("longitude: %f\n", mun->coord[1]);
-    printf("capital: %d\n", mun->capital);
-    printf("codigo_uf: %d\n", mun->cod_uf);
-    printf("siafi_id: %d\n", mun->siafi_id);
-    printf("ddd: %d\n", mun->ddd);
-    printf("fuso_horario: %s\n", mun->fuso);
-    printf("\n");
+	printf("---------------------------------\n");
+	printf("codigo_ibge: %d\n", mun->cod_ibge);
+	printf("nome: %s\n", mun->nome);
+	printf("latitude: %f\n", mun->coord[0]);
+	printf("longitude: %f\n", mun->coord[1]);
+	printf("capital: %d\n", mun->capital);
+	printf("codigo_uf: %d\n", mun->cod_uf);
+	printf("siafi_id: %d\n", mun->siafi_id);
+	printf("ddd: %d\n", mun->ddd);
+	printf("fuso_horario: %s\n", mun->fuso);
+	printf("\n");
 }
 
+/* funções de comparação */
 int cmp_int(void * a, void * b) {
-    return *((int *) a) - *((int *) b);
+	return *((int *) a) - *((int *) b);
 }
 
 int cmp_float(void * a, void * b) {
-    return (int) (*((float *) a)) - (int) (*((float *) b));
+	return (int) (*((float *) a)) - (int) (*((float *) b));
 }
 
 int cmp_str(void * a, void * b) {
-    return strcmp((char *) a, (char *) b);
+	return strcmp((char *) a, (char *) b);
 }
