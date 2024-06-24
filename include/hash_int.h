@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <stdint.h>
 typedef struct {
-    uintptr_t * array;
-    int size;
-    int max_size;
-    int (* get_key)(void *);
+   uintptr_t * array;
+   int size;
+   int max_size;
+   int (* get_key)(void *);
 } HashInt;
 
 uint32_t int32hash(u_int32_t a);

@@ -105,7 +105,7 @@ int main() {
                   exibe_mun((Mun *) busca_hash_int(&hashMun, *pret++));
                }
             } 
-            else printf("Nenhum retorno!\n")
+            else printf("Nenhum retorno!\n");
 
             free(ret);
             break;

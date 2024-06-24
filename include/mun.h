@@ -4,14 +4,14 @@
 #include <stdlib.h>
 #include <string.h>
 typedef struct {
-  int cod_ibge;
-  char nome[35];
-  float coord[2];
-  int capital;
-  int cod_uf;
-  int siafi_id;
-  int ddd;
-  char fuso[50];
+   int cod_ibge;
+   char nome[35];
+   float coord[2];
+   int capital;
+   int cod_uf;
+   int siafi_id;
+   int ddd;
+   char fuso[50];
 } Mun;
 
 /* constroi objeto Municipio */
