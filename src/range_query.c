@@ -18,37 +18,59 @@ void menu_escolha(char * label, int * op) {
    *op = (*op == 1) ? *op : 0;
 }
 
-void menu_range(int * eq) {
-   printf("\n0 - Igual\n1 - Maior\n2 - Menor\n\n");
+void menu_range(Faixa * eq) {
+   printf("\n");
+   printf("Intervalo:");
+   printf("\n0 - Igual(=)\n1 - Maior(>)\n2 - Menor(<)\n3 - Entre(< >)\n\n");
    scanf("%d", eq);
 
-   *eq = (*eq == 2) ? -1 : *eq;
+   *eq = (*eq == 2) ? MENOR : *eq;
 }
 
 /* funções relativas a query */
-int * query(Arv * arv, int tipo) {
-   void * campo;
-   printf("Chave: ");
+int * query(Arv * arv, Tipo tipo, Faixa eq, int tam) {
+   int * ret;
 
-   int eq;
-   switch(tipo) {
-      case INT:
-         scanf("%d", (int *) campo);
-         menu_range(&eq);
-         break;
-      case FLOAT:
-         scanf("%f", (float *) campo);
-         menu_range(&eq);
-         break;
-      case STR:
-         scanf(" %[^\n]", (char *) campo);
-         eq = 0;
-         break;
-      default:
-         printf("Tipo inválido\n");
+   void * campo1 = malloc(sizeof(void *));
+   void * campo2 = NULL;
+
+   printf("Chave: ");
+   if(eq == ENTRE) {
+      printf("\b\bs:\nmin-> ");
+      campo2 = malloc(sizeof(void *));
    }
 
-   return range_avl(arv, campo, eq, QTD_MUNICIPIOS);
+   switch(tipo) {
+      case INT:
+         scanf("%d", (int *) campo1);
+
+         if(eq == ENTRE) {
+            printf("max-> ");
+            scanf("%d", (int *) campo2);
+         }
+         break;
+      case FLOAT:
+         scanf("%f", (float *) campo1);
+
+         if(eq == ENTRE) {
+            printf("max-> ");
+            scanf("%f", (float *) campo2);
+         }
+         break;
+      case STR:
+         scanf(" %[^\n]", (char *) campo1);
+         break;
+      default:
+         printf("Tipagem inválida\n");
+   }
+
+   if(campo2) ret = comb_query(_range(arv, campo1, MAIOR, tam),_range(arv, campo2, MENOR, tam),tam);
+   else ret = _range(arv, campo1, eq, tam);
+
+   free(campo1);
+   free(campo2);
+
+   return ret;
 }
 
 int * comb_query(int * regs1, int * regs2, int tam) {
@@ -65,11 +87,69 @@ int * comb_query(int * regs1, int * regs2, int tam) {
 
          if(*aux1 == *aux2) *pret++ = *aux1;
       }
-
-      /* desalocação de arrays originais */
-      free(regs1);
-      free(regs2);
    }
 
    return ret;
+}
+
+int * _range(ArvAVL * arv, void * chave, Faixa eq, int tam) {
+   int * ret = (int *) calloc(tam+1, sizeof(int)); //vetor de inteiro para retorno
+   int * pret = ret; //ponteiro para atribuição nos campos do vetor
+   int cmp;
+
+   Node * aux = arv->raiz;
+   Reg * reg;
+
+   switch(eq) {
+      case MAIOR: //registros com chaves maiores que a chave de busca
+         while(aux->dir) aux = aux->dir;
+
+         do {
+            cmp = arv->cmp(chave, aux->regs->chave);
+
+            if(cmp < 0) {
+               reg = aux->regs;
+
+               _salva_ret(&pret, reg);
+
+               aux = *(_antecessor(&aux)); //retoma antecessor para buscar valores maiores
+            }
+         } while(aux && cmp < 0); 
+         break;
+      case MENOR: //registros com chaves menores que a chave de busca
+         while(aux->esq) aux = aux->esq;
+
+         do {
+            cmp = arv->cmp(chave, aux->regs->chave);
+
+            if(cmp > 0) {
+               reg = aux->regs;
+
+               _salva_ret(&pret, reg);
+
+               aux = *(_sucessor(&aux)); //retoma antecessor para buscar valores maiores
+            }
+         } while(aux && cmp > 0); 
+         break;
+      case IGUAL: // registros com chaves iguais à chave de busca 
+         reg = busca_avl(arv, chave);
+         _salva_ret(&pret, reg);
+         break;
+      default:
+         printf("Comparação inválida\n");
+   }
+
+   if(ret[0] == 0) {
+      free(ret);
+      ret = NULL;
+   }
+
+   return ret;
+}
+
+void _salva_ret(int ** pret, Reg * reg) {
+   while(reg) { //iteração da lista
+      *(*pret)++ = reg->cod_ibge; //iteração do vetor de retorno
+      reg = reg->prox;
+   } 
 }

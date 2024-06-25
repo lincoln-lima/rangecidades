@@ -3,15 +3,12 @@
 #include "../include/mun.h"
 #include "../include/avl.h"
 #include "../include/range_query.h"
-#include "../include/hash.h"
+#include "../include/hash_int.h"
 #include "../include/jsense.h"
 
 #define QTD_MUNICIPIOS 5570
 #define TAM_HASH 11139
-
-#define INT 1
-#define FLOAT 2
-#define STR 3
+#define N_CAMPOS 5
 
 Mun * acessa_mun_json(JSENSE * arq, int pos);
 
@@ -52,6 +49,8 @@ int main() {
       insere_hash_int(&hashMun, mun);
    }
 
+   Arv * jungle[N_CAMPOS] = {ArvMunNome, ArvMunLats, ArvMunLons, ArvMunUF, ArvMunDDD};
+
    int continuar;
 
    do {
@@ -62,52 +61,62 @@ int main() {
             printf("Encerrando execução...\n");
             break;
          case 1:
-            int * ret;
+            int * nomes = NULL;
+            int * lats = NULL;
+            int * lons = NULL;
+            int * ufs = NULL;
+            int * ddds = NULL;
 
-            for(int i = 1; i <= 5; i++) {
-               int op;
+            int * conj[N_CAMPOS+1] = {nomes, lats, lons, ufs, ddds, NULL};
+            int ** ppconj = conj;
 
+            int * res = *ppconj;
+
+            char * labels[N_CAMPOS] =
+            {
+               "Nome",
+               "Latitude",
+               "Longitude",
+               "UF",
+               "DDD"
+            };
+
+            int tipos[N_CAMPOS] = {STR, FLOAT, FLOAT, INT, INT};
+            int op;
+            int eq;
+
+            for(int i = 0; i < N_CAMPOS; i++) {
                printf("\n");
+               menu_escolha(labels[i], &op);
 
-               switch(i) {
-                  case 1:
-                     menu_escolha("Nome", &op);
-                     int * nomes = (op == 1) ? query(ArvMunNome, STR) : NULL;
-                     break;
-                  case 2:
-                     menu_escolha("Latitude", &op);
-                     int * lats = (op == 1) ? query(ArvMunLats, FLOAT) : NULL;
-                     break;
-                  case 3:
-                     menu_escolha("Longitude", &op);
-                     int * lons = (op == 1) ? query(ArvMunLons, FLOAT) : NULL;
-                     break;
-                  case 4:
-                     menu_escolha("UF", &op);
-                     int * ufs = (op == 1) ? query(ArvMunUF, INT) : NULL;
-                     break;
-                  case 5:
-                     menu_escolha("DDD", &op);
-                     int * ddds = (op == 1) ? query(ArvMunDDD, INT) : NULL;
-                     break;
+               if(op) {
+                  if(tipos[i] != STR) menu_range(&eq);
+                  else eq = IGUAL;
+
+                  *ppconj = query(jungle[i], tipos[i], eq, QTD_MUNICIPIOS);
+                  res = comb_query(res, *ppconj, QTD_MUNICIPIOS);
                }
+               else if(!res && res == *ppconj) res = *ppconj+1; 
+
+               *ppconj++;
             }
-            ret = comb_query(nomes, lats, QTD_MUNICIPIOS);
-            ret = comb_query(ret, lons, QTD_MUNICIPIOS);
-            ret = comb_query(ret, ufs, QTD_MUNICIPIOS);
-            ret = comb_query(ret, ddds, QTD_MUNICIPIOS);
 
-            int * pret = ret;
-
-            if(pret) {
-               for(int qtd = 1; pret < ret + QTD_MUNICIPIOS && *pret != 0; qtd++) {
-                  printf("Registro %d\n", qtd);
-                  exibe_mun((Mun *) busca_hash_int(&hashMun, *pret++));
+            if(res) {
+               int qtd = 0;
+               for(int * pres = res; pres < res + QTD_MUNICIPIOS && *pres != 0; pres++) {
+                  printf("Registro %d\n", ++qtd);
+                  exibe_mun((Mun *) busca_hash_int(&hashMun, *pres));
                }
             } 
             else printf("Nenhum retorno!\n");
 
-            free(ret);
+            /* desalocação de arrays */
+            free(nomes);
+            free(lats);
+            free(lons);
+            free(ufs);
+            free(ddds);
+            free(res);
             break;
          default:
             printf("INVÁLIDA!!!\n");
@@ -126,7 +135,7 @@ int main() {
       return EXIT_SUCCESS;
    }
 
-   /* acessa e retorna município de json  */
+   /* acessa e retorna município de json */
    Mun * acessa_mun_json(JSENSE * arq, int pos) {
       int error;
 

@@ -41,7 +41,4 @@ Reg * _busca(ArvAVL * arv, Node * node, void * chave);
 /* destrói */
 void libera_avl(ArvAVL * arv);
 void _libera(Node * node);
-/* queries */
-int * range_avl(ArvAVL * arv, void * chave, int eq, int tam);
-void _salva_ret(int ** pret, Reg * reg);
 #endif
