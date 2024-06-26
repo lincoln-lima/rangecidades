@@ -17,19 +17,19 @@ int main() {
 
    /* instanciação das árvores relativas aos queries */
    ArvAVL arvMunNome;
-   constroi_avl(&arvMunNome, cmp_str);
+   constroi_avl(&arvMunNome, cmp_str, STR);
 
    ArvAVL arvMunLat;
-   constroi_avl(&arvMunLat, cmp_float);
+   constroi_avl(&arvMunLat, cmp_float, FLOAT);
 
    ArvAVL arvMunLon;
-   constroi_avl(&arvMunLon, cmp_float);
+   constroi_avl(&arvMunLon, cmp_float, FLOAT);
 
    ArvAVL arvMunUF;
-   constroi_avl(&arvMunUF, cmp_int);
+   constroi_avl(&arvMunUF, cmp_int, INT);
 
    ArvAVL arvMunDDD;
-   constroi_avl(&arvMunDDD, cmp_int);
+   constroi_avl(&arvMunDDD, cmp_int, INT);
 
    /* instanciação da tabela hash para código ibge */
    HashInt hashMun;
@@ -49,7 +49,7 @@ int main() {
       insere_hash_int(&hashMun, mun);
    }
 
-   Arv * jungle[N_CAMPOS] = {ArvMunNome, ArvMunLats, ArvMunLons, ArvMunUF, ArvMunDDD};
+   ArvAVL * jungle[N_CAMPOS] = {&arvMunNome, &arvMunLat, &arvMunLon, &arvMunUF, &arvMunDDD};
 
    int continuar;
 
@@ -81,7 +81,6 @@ int main() {
                "DDD"
             };
 
-            int tipos[N_CAMPOS] = {STR, FLOAT, FLOAT, INT, INT};
             int op;
             int eq;
 
@@ -90,10 +89,10 @@ int main() {
                menu_escolha(labels[i], &op);
 
                if(op) {
-                  if(tipos[i] != STR) menu_range(&eq);
+                  if(jungle[i]->tipo != STR) menu_range(&eq);
                   else eq = IGUAL;
 
-                  *ppconj = query(jungle[i], tipos[i], eq, QTD_MUNICIPIOS);
+                  *ppconj = query(jungle[i], eq, QTD_MUNICIPIOS);
                   res = comb_query(res, *ppconj, QTD_MUNICIPIOS);
                }
                else if(!res && res == *ppconj) res = *ppconj+1; 
@@ -120,78 +119,79 @@ int main() {
             break;
          default:
             printf("INVÁLIDA!!!\n");
-
-      } while(continuar);
-
-      libera_avl(&arvMunNome);
-      libera_avl(&arvMunLat);
-      libera_avl(&arvMunLon);
-      libera_avl(&arvMunUF);
-      libera_avl(&arvMunDDD);
-      libera_hash_int(&hashMun);
-
-      jse_free(arq);
-
-      return EXIT_SUCCESS;
-   }
-
-   /* acessa e retorna município de json */
-   Mun * acessa_mun_json(JSENSE * arq, int pos) {
-      int error;
-
-      char * campos[9] = 
-      {
-         "codigo_ibge",
-         "nome",
-         "latitude",
-         "longitude",
-         "capital",
-         "codigo_uf",
-         "siafi_id",
-         "ddd",
-         "fuso_horario"
-      };
-
-      char operacao[20];
-
-      int cod_ibge, capital, cod_uf, siafi_id, ddd;
-      char nome[35];
-      char fuso[50];
-      float latitude, longitude;
-
-      for(int i = 0; i < 9; i++) {
-         sprintf(operacao, "[%d].%s", pos, campos[i]);
-
-         switch(i) {
-            case 0:
-               cod_ibge = tec_string_to_int(jse_get(arq, operacao));
-               break;
-            case 1:
-               strcpy(nome, jse_get(arq, operacao));
-               break;
-            case 2:
-               latitude = tec_string_to_double(jse_get(arq, operacao), &error);
-               break;
-            case 3:
-               longitude = tec_string_to_double(jse_get(arq, operacao), &error);
-               break;
-            case 4:
-               capital = tec_string_to_int(jse_get(arq, operacao));
-               break;
-            case 5:
-               cod_uf = tec_string_to_int(jse_get(arq, operacao));
-               break;
-            case 6:
-               siafi_id = tec_string_to_int(jse_get(arq, operacao));
-               break;
-            case 7:
-               ddd = tec_string_to_int(jse_get(arq, operacao));
-               break;
-            case 8:
-               strcpy(fuso, jse_get(arq, operacao));
-               break;
-         }
       }
 
-      return aloca_mun(cod_ibge, nome, latitude, longitude, capital, cod_uf, siafi_id, ddd, fuso);
+   } while(continuar);
+
+   libera_avl(&arvMunNome);
+   libera_avl(&arvMunLat);
+   libera_avl(&arvMunLon);
+   libera_avl(&arvMunUF);
+   libera_avl(&arvMunDDD);
+   libera_hash_int(&hashMun);
+
+   jse_free(arq);
+
+   return EXIT_SUCCESS;
+}
+
+/* acessa e retorna município de json */
+Mun * acessa_mun_json(JSENSE * arq, int pos) {
+   int error;
+
+   char * campos[9] = 
+   {
+      "codigo_ibge",
+      "nome",
+      "latitude",
+      "longitude",
+      "capital",
+      "codigo_uf",
+      "siafi_id",
+      "ddd",
+      "fuso_horario"
+   };
+
+   char operacao[20];
+
+   int cod_ibge, capital, cod_uf, siafi_id, ddd;
+   char nome[35];
+   char fuso[50];
+   float latitude, longitude;
+
+   for(int i = 0; i < 9; i++) {
+      sprintf(operacao, "[%d].%s", pos, campos[i]);
+
+      switch(i) {
+         case 0:
+            cod_ibge = tec_string_to_int(jse_get(arq, operacao));
+            break;
+         case 1:
+            strcpy(nome, jse_get(arq, operacao));
+            break;
+         case 2:
+            latitude = tec_string_to_double(jse_get(arq, operacao), &error);
+            break;
+         case 3:
+            longitude = tec_string_to_double(jse_get(arq, operacao), &error);
+            break;
+         case 4:
+            capital = tec_string_to_int(jse_get(arq, operacao));
+            break;
+         case 5:
+            cod_uf = tec_string_to_int(jse_get(arq, operacao));
+            break;
+         case 6:
+            siafi_id = tec_string_to_int(jse_get(arq, operacao));
+            break;
+         case 7:
+            ddd = tec_string_to_int(jse_get(arq, operacao));
+            break;
+         case 8:
+            strcpy(fuso, jse_get(arq, operacao));
+            break;
+      }
    }
+
+   return aloca_mun(cod_ibge, nome, latitude, longitude, capital, cod_uf, siafi_id, ddd, fuso);
+}
