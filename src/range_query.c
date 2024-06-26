@@ -28,7 +28,7 @@ void menu_range(Faixa * eq) {
 }
 
 /* funções relativas a query */
-int * query(Arv * arv, Tipo tipo, Faixa eq, int tam) {
+int * query(ArvAVL * arv, Faixa eq, int tam) {
    int * ret;
 
    void * campo1 = malloc(sizeof(void *));
@@ -40,7 +40,7 @@ int * query(Arv * arv, Tipo tipo, Faixa eq, int tam) {
       campo2 = malloc(sizeof(void *));
    }
 
-   switch(tipo) {
+   switch(arv->tipo) {
       case INT:
          scanf("%d", (int *) campo1);
 
