@@ -2,29 +2,36 @@
 
 /* funções de menu */
 void menu_inicial(int * op) {
-   printf("----------------------------------------------------\n");
-   printf("INFORME\n");
-   printf("Busca de munícipios por queries\n");
-   printf("0 - Encerrar\n");
-   printf("1 - Realizar\n");
-   printf("\nOpção: ");
+   printf("-----------------------------------\n");
+   printf("\n");
+
+   printf("[0] Encerrar\n");
+   printf("[1] Continuar\n");
+   printf("\n--> ");
    scanf("%d", op);
+
+   printf("\n");
 }
 
 void menu_escolha(char * label, int * op) {
-   printf("%s:\n(0) não\n(1) sim\n-> ", label);
+   printf("%s:\n[0] não\n[1] sim\n", label);
+   printf("\n--> ");
    scanf("%d", op);
 
    *op = (*op == 1) ? *op : 0;
+
+   printf("\n");
 }
 
 void menu_range(Faixa * eq) {
-   printf("\n");
    printf("Intervalo:");
-   printf("\n0 - Igual(=)\n1 - Maior(>)\n2 - Menor(<)\n3 - Entre(< >)\n\n");
+   printf("\n[0] igual(=)\n[1] maior(>)\n[2] menor(<)\n[3] entre(< >)\n");
+   printf("\n--> ");
    scanf("%d", eq);
 
    *eq = (*eq == 2) ? MENOR : *eq;
+
+   printf("\n");
 }
 
 /* funções relativas a query */
@@ -69,6 +76,8 @@ int * query(ArvAVL * arv, Faixa eq, int tam) {
 
    free(campo1);
    free(campo2);
+
+   printf("\n");
 
    return ret;
 }
