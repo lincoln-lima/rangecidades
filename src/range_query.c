@@ -12,7 +12,7 @@ void menu_inicial(int * op) {
 }
 
 void menu_escolha(char * label, int * op) {
-   printf("%s\n(0) - não (1) - sim\n: ", label);
+   printf("%s:\n(0) não\n(1) sim\n-> ", label);
    scanf("%d", op);
 
    *op = (*op == 1) ? *op : 0;
