@@ -1,10 +1,37 @@
 #include "../include/avl.h"
 
 /* constrói */
-void constroi_avl(ArvAVL * arv, int (* cmp)(void *, void *), Tipo tipo) {
+void constroi_avl(ArvAVL * arv, Tipo tipo) {
    arv->raiz = NULL;
-   arv->cmp = cmp; //passagem da função de comparação para chave específica
    arv->tipo = tipo;
+
+   //passagem da função de comparação para chave específica
+   switch(arv->tipo) {
+      case INT:
+         arv->cmp = cmp_int;
+         break;
+      case FLOAT:
+         arv->cmp = cmp_float;
+         break;
+      case STR:
+         arv->cmp = cmp_str;
+         break;
+      default:
+         arv->cmp = cmp_int;
+   }
+}
+
+/* funções de comparação */
+int cmp_int(void * a, void * b) {
+   return *((int *) a) - *((int *) b);
+}
+
+int cmp_float(void * a, void * b) {
+   return (int) (*((float *) a)) - (int) (*((float *) b));
+}
+
+int cmp_str(void * a, void * b) {
+   return strcmp((char *) a, (char *) b);
 }
 
 /* auxiliares */

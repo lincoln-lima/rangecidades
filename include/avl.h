@@ -2,6 +2,7 @@
 #define __AVLMODMUN__
 #include<stdio.h>
 #include<stdlib.h>
+#include <string.h>
 
 typedef int Tipo;
 #define INT 1
@@ -29,7 +30,11 @@ typedef struct {
 } ArvAVL;
 
 /* constrói */
-void constroi_avl(ArvAVL * arv, int (*cmp)(void *, void *), Tipo tipo);
+void constroi_avl(ArvAVL * arv, Tipo tipo);
+/* funções de comparação */
+int cmp_int(void * a, void * b);
+int cmp_float(void * a, void * b);
+int cmp_str(void * a, void * b);
 /* auxiliares */
 int _max(int a, int b);
 int _altura(Node * node);
