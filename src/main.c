@@ -71,14 +71,10 @@ int main() {
             int * ddds = NULL;
 
             int * conj[N_CAMPOS+1] = {nomes, lats, lons, ufs, ddds, NULL};
-            int ** ppconj = conj;
-
-            int ** ppres = ppconj;
-
-            printf("ppcon: %p\n", ppconj);
-            printf("ppres: %p\n\n", ppres);
+            int ** auxpp = conj;
 
             int * res = NULL;
+            int ** ppres = &res;
 
             char * labels[N_CAMPOS] =
             {
@@ -95,29 +91,35 @@ int main() {
             for(int i = 0; i < N_CAMPOS; i++) {
                menu_escolha(labels[i], &op);
 
-               if(op) {
-                  ppres = &res;
+               printf("conj: %p\n", conj);
+               printf("*conj: %p\n\n", *conj);
+               printf("auxpp: %p\n", auxpp);
+               printf("*auxpp: %p\n\n", *auxpp);
+               printf("ppres: %p\n", ppres);
+               printf("*ppres: %p\n\n", *ppres);
 
+               if(op) {
                   if(jungle[i]->tipo != STR) menu_range(&eq);
                   else eq = IGUAL;
 
-                  *ppconj = query(jungle[i], eq, QTD_MUNICIPIOS);
-                  *ppres = comb_query(*ppres, *ppconj, QTD_MUNICIPIOS);
+                  conj[i] = query(jungle[i], eq, QTD_MUNICIPIOS);
+                  *ppres = comb_query(*auxpp, conj[i], QTD_MUNICIPIOS);
+
+                  auxpp = ppres;
                }
-               else if(!*ppres && ppres == ppconj) *ppres++; 
+               else if(*auxpp == conj[i]) auxpp++; 
 
-               printf("ppcon: %p\n", ppconj);
-               printf("ppres: %p\n\n", ppres);
-
-               printf("*ppconj: %p\n", *ppconj);
+               printf("conj: %p\n", conj);
+               printf("*conj: %p\n\n", *conj);
+               printf("auxpp: %p\n", auxpp);
+               printf("*auxpp: %p\n\n", *auxpp);
+               printf("ppres: %p\n", ppres);
                printf("*ppres: %p\n\n", *ppres);
-
-               *ppconj++;
             }
 
-            if(*ppres) {
+            if(res) {
                int qtd = 0;
-               for(int * pres = *ppres; pres < *ppres + QTD_MUNICIPIOS && *pres != 0; pres++) {
+               for(int * pres = res; pres < res + QTD_MUNICIPIOS && *pres != 0; pres++) {
                   printf("---------------------------------\n");
                   exibe_mun((Mun *) busca_hash_int(&hashMun, *pres));
                   printf("---------------------------------\n");
@@ -125,9 +127,9 @@ int main() {
                   qtd++;
                }
 
-               printf("Registros %d\n", qtd);
+               printf("Registros: %d\n", qtd);
             } 
-            else printf("Nenhum retorno!\n");
+            else printf("Nenhum registro!\n");
 
             /* desalocação de arrays */
             free(nomes);
@@ -135,7 +137,7 @@ int main() {
             free(lons);
             free(ufs);
             free(ddds);
-            free(*ppres);
+            free(res);
             break;
          default:
             printf("INVÁLIDA!!!\n");
