@@ -26,7 +26,6 @@ int get_key_mun(void * mun) {
 void exibe_mun(void * cid) {
    Mun * mun = (Mun *) cid;
 
-   printf("---------------------------------\n");
    printf("codigo_ibge: %d\n", mun->cod_ibge);
    printf("nome: %s\n", mun->nome);
    printf("latitude: %f\n", mun->coord[0]);
@@ -36,7 +35,6 @@ void exibe_mun(void * cid) {
    printf("siafi_id: %d\n", mun->siafi_id);
    printf("ddd: %d\n", mun->ddd);
    printf("fuso_horario: %s\n", mun->fuso);
-   printf("\n");
 }
 
 /* funções de comparação */
