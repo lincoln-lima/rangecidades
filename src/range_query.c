@@ -43,7 +43,7 @@ int * query(ArvAVL * arv, Faixa eq, int tam) {
 
    printf("Chave: ");
    if(eq == ENTRE) {
-      printf("\b\bs:\nmin-> ");
+      printf("\b\bs\n--> mínimo: ");
       campo2 = malloc(sizeof(void *));
    }
 
@@ -52,7 +52,7 @@ int * query(ArvAVL * arv, Faixa eq, int tam) {
          scanf("%d", (int *) campo1);
 
          if(eq == ENTRE) {
-            printf("max-> ");
+            printf("--> máximo: ");
             scanf("%d", (int *) campo2);
          }
          break;
@@ -60,7 +60,7 @@ int * query(ArvAVL * arv, Faixa eq, int tam) {
          scanf("%f", (float *) campo1);
 
          if(eq == ENTRE) {
-            printf("max-> ");
+            printf("--> máximo: ");
             scanf("%f", (float *) campo2);
          }
          break;
@@ -95,6 +95,11 @@ int * comb_query(int * regs1, int * regs2, int tam) {
          for(aux2 = regs2; aux2 < regs2 + tam && *aux2 != 0 && *aux1 != *aux2; aux2++); 
 
          if(*aux1 == *aux2) *pret++ = *aux1;
+      }
+
+      if(!*ret) {
+         free(ret);
+         ret = NULL;
       }
    }
 
@@ -148,7 +153,7 @@ int * _range(ArvAVL * arv, void * chave, Faixa eq, int tam) {
          printf("Comparação inválida\n");
    }
 
-   if(ret[0] == 0) {
+   if(!*ret) {
       free(ret);
       ret = NULL;
    }

@@ -38,7 +38,7 @@ int main() {
    /*
       busca dos municípios no json
       e inserção das chaves com código em sua árvore
-    */
+      */
    for(int i = 0; i < QTD_MUNICIPIOS; i++) {
       Mun * mun = acessa_mun_json(arq, i);
       insere_avl(&arvMunNome, &mun->nome, mun->cod_ibge);
@@ -89,14 +89,14 @@ int main() {
             int eq;
 
             for(int i = 0; i < N_CAMPOS; i++) {
-               menu_escolha(labels[i], &op);
+               // printf("conj: %p\n", conj);
+               // printf("conj[i]: %p\n\n", conj[i]);
+               // printf("auxpp: %p\n", auxpp);
+               // printf("*auxpp: %p\n\n", *auxpp);
+               // printf("ppres: %p\n", ppres);
+               // printf("*ppres: %p\n\n", *ppres);
 
-               printf("conj: %p\n", conj);
-               printf("*conj: %p\n\n", *conj);
-               printf("auxpp: %p\n", auxpp);
-               printf("*auxpp: %p\n\n", *auxpp);
-               printf("ppres: %p\n", ppres);
-               printf("*ppres: %p\n\n", *ppres);
+               menu_escolha(labels[i], &op);
 
                if(op) {
                   if(jungle[i]->tipo != STR) menu_range(&eq);
@@ -109,27 +109,27 @@ int main() {
                }
                else if(*auxpp == conj[i]) auxpp++; 
 
-               printf("conj: %p\n", conj);
-               printf("*conj: %p\n\n", *conj);
-               printf("auxpp: %p\n", auxpp);
-               printf("*auxpp: %p\n\n", *auxpp);
-               printf("ppres: %p\n", ppres);
-               printf("*ppres: %p\n\n", *ppres);
+               // printf("conj: %p\n", conj);
+               // printf("conj[i]: %p\n\n", conj[i]);
+               // printf("auxpp: %p\n", auxpp);
+               // printf("*auxpp: %p\n\n", *auxpp);
+               // printf("ppres: %p\n", ppres);
+               // printf("*ppres: %p\n\n", *ppres);
             }
 
             if(res) {
                int qtd = 0;
                for(int * pres = res; pres < res + QTD_MUNICIPIOS && *pres != 0; pres++) {
-                  printf("---------------------------------\n");
+                  printf("-----------------------------------\n");
                   exibe_mun((Mun *) busca_hash_int(&hashMun, *pres));
-                  printf("---------------------------------\n");
+                  printf("-----------------------------------\n");
 
                   qtd++;
                }
 
-               printf("Registros: %d\n", qtd);
+               printf("Municípios encontrados: %d\n", qtd);
             } 
-            else printf("Nenhum registro!\n");
+            else printf("Nenhum município encontrado!\n");
 
             /* desalocação de arrays */
             free(nomes);
