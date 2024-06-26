@@ -17,19 +17,19 @@ int main() {
 
    /* instanciação das árvores relativas aos queries */
    ArvAVL arvMunNome;
-   constroi_avl(&arvMunNome, cmp_str, STR);
+   constroi_avl(&arvMunNome, STR);
 
    ArvAVL arvMunLat;
-   constroi_avl(&arvMunLat, cmp_float, FLOAT);
+   constroi_avl(&arvMunLat, FLOAT);
 
    ArvAVL arvMunLon;
-   constroi_avl(&arvMunLon, cmp_float, FLOAT);
+   constroi_avl(&arvMunLon, FLOAT);
 
    ArvAVL arvMunUF;
-   constroi_avl(&arvMunUF, cmp_int, INT);
+   constroi_avl(&arvMunUF, INT);
 
    ArvAVL arvMunDDD;
-   constroi_avl(&arvMunDDD, cmp_int, INT);
+   constroi_avl(&arvMunDDD, INT);
 
    /* instanciação da tabela hash para código ibge */
    HashInt hashMun;
@@ -53,11 +53,14 @@ int main() {
 
    int continuar;
 
+   printf("Busca de munícipios por range query\n");
+
    do {
       menu_inicial(&continuar);
 
       switch(continuar) {
          case 0:
+            printf("-----------------------------------\n");
             printf("Encerrando execução...\n");
             break;
          case 1:
@@ -70,10 +73,12 @@ int main() {
             int * conj[N_CAMPOS+1] = {nomes, lats, lons, ufs, ddds, NULL};
             int ** ppconj = conj;
 
-            int ** res = ppconj;
+            int ** ppres = ppconj;
 
-            printf("pp: %p\n", *ppconj);
-            printf("res: %p\n", *res);
+            printf("ppcon: %p\n", ppconj);
+            printf("ppres: %p\n\n", ppres);
+
+            int * res = NULL;
 
             char * labels[N_CAMPOS] =
             {
@@ -88,27 +93,31 @@ int main() {
             int eq;
 
             for(int i = 0; i < N_CAMPOS; i++) {
-               printf("\n");
                menu_escolha(labels[i], &op);
 
                if(op) {
+                  ppres = &res;
+
                   if(jungle[i]->tipo != STR) menu_range(&eq);
                   else eq = IGUAL;
 
                   *ppconj = query(jungle[i], eq, QTD_MUNICIPIOS);
-                  *res = comb_query(*res, *ppconj, QTD_MUNICIPIOS);
+                  *ppres = comb_query(*ppres, *ppconj, QTD_MUNICIPIOS);
                }
-               else if(!*res && *res == *ppconj) *res = *ppconj+1; 
+               else if(!*ppres && ppres == ppconj) *ppres++; 
 
-               printf("pp: %p\n", *ppconj);
-               printf("res: %p\n", *res);
+               printf("ppcon: %p\n", ppconj);
+               printf("ppres: %p\n\n", ppres);
+
+               printf("*ppconj: %p\n", *ppconj);
+               printf("*ppres: %p\n\n", *ppres);
 
                *ppconj++;
             }
 
-            if(*res) {
+            if(*ppres) {
                int qtd = 0;
-               for(int * pres = *res; pres < *res + QTD_MUNICIPIOS && *pres != 0; pres++) {
+               for(int * pres = *ppres; pres < *ppres + QTD_MUNICIPIOS && *pres != 0; pres++) {
                   printf("---------------------------------\n");
                   exibe_mun((Mun *) busca_hash_int(&hashMun, *pres));
                   printf("---------------------------------\n");
@@ -126,7 +135,7 @@ int main() {
             free(lons);
             free(ufs);
             free(ddds);
-            free(*res);
+            free(*ppres);
             break;
          default:
             printf("INVÁLIDA!!!\n");
