@@ -70,7 +70,10 @@ int main() {
             int * conj[N_CAMPOS+1] = {nomes, lats, lons, ufs, ddds, NULL};
             int ** ppconj = conj;
 
-            int * res = *ppconj;
+            int ** res = ppconj;
+
+            printf("pp: %p\n", *ppconj);
+            printf("res: %p\n", *res);
 
             char * labels[N_CAMPOS] =
             {
@@ -93,19 +96,27 @@ int main() {
                   else eq = IGUAL;
 
                   *ppconj = query(jungle[i], eq, QTD_MUNICIPIOS);
-                  res = comb_query(res, *ppconj, QTD_MUNICIPIOS);
+                  *res = comb_query(*res, *ppconj, QTD_MUNICIPIOS);
                }
-               else if(!res && res == *ppconj) res = *ppconj+1; 
+               else if(!*res && *res == *ppconj) *res = *ppconj+1; 
+
+               printf("pp: %p\n", *ppconj);
+               printf("res: %p\n", *res);
 
                *ppconj++;
             }
 
-            if(res) {
+            if(*res) {
                int qtd = 0;
-               for(int * pres = res; pres < res + QTD_MUNICIPIOS && *pres != 0; pres++) {
-                  printf("Registro %d\n", ++qtd);
+               for(int * pres = *res; pres < *res + QTD_MUNICIPIOS && *pres != 0; pres++) {
+                  printf("---------------------------------\n");
                   exibe_mun((Mun *) busca_hash_int(&hashMun, *pres));
+                  printf("---------------------------------\n");
+
+                  qtd++;
                }
+
+               printf("Registros %d\n", qtd);
             } 
             else printf("Nenhum retorno!\n");
 
@@ -115,7 +126,7 @@ int main() {
             free(lons);
             free(ufs);
             free(ddds);
-            free(res);
+            free(*res);
             break;
          default:
             printf("INVÁLIDA!!!\n");
