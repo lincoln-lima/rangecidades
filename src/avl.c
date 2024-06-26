@@ -1,9 +1,10 @@
 #include "../include/avl.h"
 
 /* constrói */
-void constroi_avl(ArvAVL * arv, int (* cmp)(void *, void *)) {
+void constroi_avl(ArvAVL * arv, int (* cmp)(void *, void *), Tipo tipo) {
    arv->raiz = NULL;
    arv->cmp = cmp; //passagem da função de comparação para chave específica
+   arv->tipo = tipo;
 }
 
 /* auxiliares */
