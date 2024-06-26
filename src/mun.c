@@ -36,16 +36,3 @@ void exibe_mun(void * cid) {
    printf("ddd: %d\n", mun->ddd);
    printf("fuso_horario: %s\n", mun->fuso);
 }
-
-/* funções de comparação */
-int cmp_int(void * a, void * b) {
-   return *((int *) a) - *((int *) b);
-}
-
-int cmp_float(void * a, void * b) {
-   return (int) (*((float *) a)) - (int) (*((float *) b));
-}
-
-int cmp_str(void * a, void * b) {
-   return strcmp((char *) a, (char *) b);
-}

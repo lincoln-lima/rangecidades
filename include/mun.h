@@ -20,8 +20,4 @@ Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capi
 int get_key_mun(void * mun);
 /* mostra todos os campos do Municipio */
 void exibe_mun(void * cid);
-/* funções de comparação */
-int cmp_int(void * a, void * b);
-int cmp_float(void * a, void * b);
-int cmp_str(void * a, void * b);
 #endif
