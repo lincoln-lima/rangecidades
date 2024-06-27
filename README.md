@@ -34,7 +34,7 @@ As funções utilizadas para leitura dos registros de municípios do arquivo `.j
    ```
 ## Utilização
 ### Menu
-Um menu será exibido para dar início às buscas
+> Um menu será exibido para dar início às buscas
 ```bash
 [0] Encerrar
 [1] Continuar
@@ -42,7 +42,7 @@ Um menu será exibido para dar início às buscas
 --> _
 ```
 ### Campos
-Será questionado ao usuário a respeito de cada campo se este deverá ser incluso à busca.
+> Será questionado ao usuário a respeito de cada campo se este deverá ser incluso à busca.
 ```bash
 Nome:
 [0] não
@@ -50,10 +50,10 @@ Nome:
 
 --> _
 ```
-Ao incluí-lo ele será combinado apenas com os demais campos escolhidos.
-Do contrário, ele não será incluso no resultado da busca.
+> Ao incluí-lo ele será combinado apenas com os demais campos escolhidos.
+> Do contrário, ele não será incluso no resultado da busca.
 ### Faixa
-Após optar por um campo[^1], o seguinte menu será exibido:
+> Após optar por um campo[^1], o seguinte menu será exibido:
 ```bash
 Intervalo:
 [0] igual a(=)
@@ -63,13 +63,13 @@ Intervalo:
 
 --> _
 ```
-Tais opções se referem ao valor a ser especificado, logo após solicitando a chave.
+> Tais opções se referem ao valor a ser especificado, logo após solicitando a chave.
 ```bash
 Chave: _
 ```
-> No caso da opção `(3) entre(< >)`[^2]será solicitado uma chave mínima e uma chave máxima.
+> No caso da opção `(3) entre(< >)`[^2] será solicitado uma chave mínima e uma chave máxima.
 ### Resultado
-A busca retornará todas as informações referentes ao municípios encontrados, e ao fim sua quantidade.
+> A busca retornará todas as informações referentes ao municípios encontrados, e ao fim sua quantidade.
 ```bash
 -----------------------------------
 codigo_ibge: 5002704
@@ -84,9 +84,8 @@ fuso_horario: America/Porto_Velho
 -----------------------------------
 Municípios encontrados: 1
 ```
-O menu inicial será reexibido para uma nova busca
-## Tudo certo
-Agora é só aproveitar!
-
 [^1]: No caso do campo Nome, o menu não será exibido, apenas solicitará a chave
 [^2]: Essa função não incluirá nem o mínimo nem o máximo solicitado
+O menu inicial será reexibido para uma nova busca
+## Tudo certo!
+Agora é só aproveitar.
