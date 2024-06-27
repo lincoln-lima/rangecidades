@@ -51,6 +51,7 @@ Nome:
 --> _
 ```
 > Ao incluí-lo ele será combinado apenas com os demais campos escolhidos.
+
 > Do contrário, ele não será incluso no resultado da busca.
 ### Faixa
 > Após optar por um campo[^1], o seguinte menu será exibido:
@@ -84,8 +85,8 @@ fuso_horario: America/Porto_Velho
 -----------------------------------
 Municípios encontrados: 1
 ```
+> O menu inicial será reexibido para uma nova busca
 [^1]: No caso do campo Nome, o menu não será exibido, apenas solicitará a chave
 [^2]: Essa função não incluirá nem o mínimo nem o máximo solicitado
-O menu inicial será reexibido para uma nova busca
-## Tudo certo!
+# Tudo certo!
 Agora é só aproveitar.
