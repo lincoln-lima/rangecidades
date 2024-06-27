@@ -13,7 +13,7 @@ void menu_escolha(char * label, int * op) { //menu de decisão se campo será in
 
 void menu_range(Faixa * eq) { //menu para determinar tipo de faixa desejada
    printf("Intervalo:");
-   printf("\n[0] igual(=)\n[1] maior(>)\n[2] menor(<)\n[3] entre(< >)\n");
+   printf("\n[0] igual a(=)\n[1] maior que(>)\n[2] menor que(<)\n[3] entre(< >)\n");
    printf("\n--> ");
    scanf("%d", eq);
 
