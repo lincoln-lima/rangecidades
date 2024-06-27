@@ -101,11 +101,3 @@ void libera_hash_int(HashInt * hash) {
    //libera o array
    free(hash->array);
 }
-
-void exibe_hash_int(HashInt * hash) {
-   for(int pos = 0; pos < hash->max_size; pos++) {
-      printf("%d: ", pos);
-      if(hash->array[pos] != 0) printf("%d\n\n", hash->get_key((void *) hash->array[pos]));
-      else printf("%ld\n\n", hash->array[pos]);
-   }
-}

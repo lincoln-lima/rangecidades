@@ -10,12 +10,17 @@ typedef struct {
    int (* get_key)(void *);
 } HashInt;
 
+/* hash  */
 uint32_t int32hash(u_int32_t a);
 unsigned int fiftyhash(unsigned int x);
+/* posição com duplo hash  */
 int _calcula_pos_hash_int(HashInt * hash, int key, int i); 
+/* inserção  */
 int insere_hash_int(HashInt * hash, void * bucket);
+/* busca  */
 void * busca_hash_int(HashInt * hash, int key);
+/* constrói*/
 int constroi_hash_int(HashInt * hash, int n_buckets, int (* get_key)(void *));
+/* destrói */
 void libera_hash_int(HashInt * hash);
-void exibe_hash_int(HashInt * hash);
 #endif

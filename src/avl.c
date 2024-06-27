@@ -5,7 +5,7 @@ void constroi_avl(ArvAVL * arv, Tipo tipo) {
    arv->raiz = NULL;
    arv->tipo = tipo;
 
-   //passagem da função de comparação para chave específica
+   //passagem da função de comparação de acordo com tipo da chave
    switch(arv->tipo) {
       case INT:
          arv->cmp = cmp_int;
@@ -21,7 +21,7 @@ void constroi_avl(ArvAVL * arv, Tipo tipo) {
    }
 }
 
-/* funções de comparação */
+/* comparação de acordo com o tipo */
 int cmp_int(void * a, void * b) {
    return *((int *) a) - *((int *) b);
 }
@@ -43,21 +43,22 @@ int _altura(Node * node) {
    return (node) ? node->h : -1;
 }
 
+/* funções de sucessor e antecessor de um node  */
 Node ** _sucessor(Node ** node) {
    Node ** temp = NULL;
 
    if(*node) {
       Node ** aux = node;
 
-      if((*aux)->dir) { // possui filho à direita
+      if((*aux)->dir) { //possui filho à direita
          temp = &(*aux)->dir;
 
          while((*temp)->esq) temp = &(*temp)->esq;
       }
-      else { // não possui filho à direita
+      else { //não possui filho à direita
          temp = &(*aux)->pai;
 
-         while(*temp && *aux == (*temp)->dir) { // encontra sucessor sem comparar chave
+         while(*temp && *aux == (*temp)->dir) { //encontra sucessor sem comparar chave
             aux = &(*temp);
             temp = &(*temp)->pai;
          } 
@@ -73,15 +74,15 @@ Node ** _antecessor(Node ** node) {
    if(*node) {
       Node ** aux = node;
 
-      if((*aux)->esq) { // possui filho à esquerda 
+      if((*aux)->esq) { //possui filho à esquerda 
          temp = &(*aux)->esq;
 
          while((*temp)->dir) temp = &(*temp)->dir;
       }
-      else { // não possui filho à esquerda
+      else { //não possui filho à esquerda
          temp = &(*aux)->pai;
 
-         while(*temp && *aux == (*temp)->esq) { // encontra antecessor sem comparar chave
+         while(*temp && *aux == (*temp)->esq) { //encontra antecessor sem comparar chave
             aux = &(*temp);
             temp = &(*temp)->pai;
          } 
@@ -96,16 +97,16 @@ void _rebalancear(Node ** node) {
    int fb = _altura((*node)->esq) - _altura((*node)->dir);
 
    if(fb == -2 || fb == 2) {
-      Node * filho = (fb == -2) ? (*node)->dir : (*node)->esq; 
+      Node ** filho = (fb == -2) ? &(*node)->dir : &(*node)->esq; 
 
-      int fbf = _altura(filho->esq) - _altura(filho->dir);
+      int fbf = _altura((*filho)->esq) - _altura((*filho)->dir);
 
       if(fb == -2) {
-         if(fbf > 0) _rd(&(*node)->dir);
+         if(fbf > 0) _rd(filho);
          _re(node);
       }
       else if (fb == 2) {
-         if(fbf < 0) _re(&(*node)->esq);
+         if(fbf < 0) _re(filho);
          _rd(node);
       }
    }
@@ -122,7 +123,7 @@ void _re(Node ** node) {
    y->esq = x;
    *node  = y;
 
-   /* reordenando os pais  */
+   /* reordenando os pais */
    y->pai = x->pai;
    x->pai = y;
    if(B) B->pai = x;
@@ -142,7 +143,7 @@ void _rd(Node ** node) {
    x->dir = y;
    *node  = x;
 
-   /* reordenando os pais  */
+   /* reordenando os pais */
    x->pai = y->pai;
    y->pai = x;
    if(B) B->pai = y;
@@ -152,11 +153,11 @@ void _rd(Node ** node) {
 }
 
 /* inserção */
-void insere_avl(ArvAVL * arv, void * chave, int cod_ibge) {
-   _insere(arv, &arv->raiz, NULL, chave, cod_ibge); //inserção com pai inicialmente nulo
+void insere_avl(ArvAVL * arv, void * chave, int cod) {
+   _insere(arv, &arv->raiz, NULL, chave, cod); //pai inicialmente nulo no caso de ser raíz
 }
 
-void _insere(ArvAVL * arv, Node ** node, Node * pai, void * chave, int cod_ibge) {
+void _insere(ArvAVL * arv, Node ** node, Node * pai, void * chave, int cod) {
    if(!*node) {
       *node = (Node *) malloc(sizeof(Node));
       (*node)->esq = NULL;
@@ -167,22 +168,22 @@ void _insere(ArvAVL * arv, Node ** node, Node * pai, void * chave, int cod_ibge)
       /* alocação da lista de registros do novo node */
       (*node)->regs = (Reg *) malloc(sizeof(Reg));
       (*node)->regs->chave = chave; 
-      (*node)->regs->cod_ibge = cod_ibge;
+      (*node)->regs->cod = cod;
       (*node)->regs->prox = NULL; 
    }
    else {
       int cmp = arv->cmp(chave, (*node)->regs->chave);
 
-      if(cmp > 0) _insere(arv, &(*node)->dir, *node, chave, cod_ibge);
-      else if(cmp < 0) _insere(arv, &(*node)->esq, *node, chave, cod_ibge);
-      else {
+      if(cmp > 0) _insere(arv, &(*node)->dir, *node, chave, cod);
+      else if(cmp < 0) _insere(arv, &(*node)->esq, *node, chave, cod);
+      else { //em caso de mesma chave, será armazenado na lista ligada
          Reg * aux = (Reg *) malloc(sizeof(Reg));
 
          aux->chave = chave;
-         aux->cod_ibge = cod_ibge;
+         aux->cod = cod;
          aux->prox = (*node)->regs;
-         // inserção ao início da lista ligada
-         (*node)->regs = aux;
+
+         (*node)->regs = aux; //inserção ao início da lista ligada
       }
    }
 

@@ -14,10 +14,10 @@ typedef struct {
    char fuso[50];
 } Mun;
 
-/* constroi objeto Municipio */
-Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capital, int uf, int id, int ddd, char * fuso);
-/* retorna chave do Municipio */
+/* constrói */
+Mun * aloca_mun(int ibge, char * nome, float lat, float lon, int capital, int uf, int id, int ddd, char * fuso);
+/* retorna chave */
 int get_key_mun(void * mun);
-/* mostra todos os campos do Municipio */
-void exibe_mun(void * cid);
+/* mostra todos os campos */
+void exibe_mun(Mun * mun);
 #endif

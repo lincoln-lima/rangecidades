@@ -1,19 +1,7 @@
 #include "../include/range_query.h"
 
 /* funções de menu */
-void menu_inicial(int * op) {
-   printf("-----------------------------------\n");
-   printf("\n");
-
-   printf("[0] Encerrar\n");
-   printf("[1] Continuar\n");
-   printf("\n--> ");
-   scanf("%d", op);
-
-   printf("\n");
-}
-
-void menu_escolha(char * label, int * op) {
+void menu_escolha(char * label, int * op) { //menu de decisão se campo será incluso ao query
    printf("%s:\n[0] não\n[1] sim\n", label);
    printf("\n--> ");
    scanf("%d", op);
@@ -23,7 +11,7 @@ void menu_escolha(char * label, int * op) {
    printf("\n");
 }
 
-void menu_range(Faixa * eq) {
+void menu_range(Faixa * eq) { //menu para determinar tipo de faixa desejada
    printf("Intervalo:");
    printf("\n[0] igual(=)\n[1] maior(>)\n[2] menor(<)\n[3] entre(< >)\n");
    printf("\n--> ");
@@ -42,12 +30,13 @@ int * query(ArvAVL * arv, Faixa eq, int tam) {
    void * campo2 = NULL;
 
    printf("Chave: ");
-   if(eq == ENTRE) {
-      printf("\b\bs\n--> mínimo: ");
+   if(eq == ENTRE) { //novo campo será alocado para realizar duas queries
+      printf("\b\bs\n");
+      printf("--> mínimo: ");
       campo2 = malloc(sizeof(void *));
    }
 
-   switch(arv->tipo) {
+   switch(arv->tipo) { //leitura mediante ao tipo de chave da árvore
       case INT:
          scanf("%d", (int *) campo1);
 
@@ -71,6 +60,7 @@ int * query(ArvAVL * arv, Faixa eq, int tam) {
          printf("Tipagem inválida\n");
    }
 
+   /* retorno mediante ao tipo de faixa */
    if(campo2) ret = comb_query(_range(arv, campo1, MAIOR, tam),_range(arv, campo2, MENOR, tam),tam);
    else ret = _range(arv, campo1, eq, tam);
 
@@ -82,10 +72,11 @@ int * query(ArvAVL * arv, Faixa eq, int tam) {
    return ret;
 }
 
+/* interseção de duas query  */
 int * comb_query(int * regs1, int * regs2, int tam) {
    int * ret = NULL;
 
-   if(regs1 && regs2) {
+   if(regs1 && regs2) { //em caso de que ao menos um é nulo, sua interseção é vazia
       ret = (int *) calloc(tam+1, sizeof(int));
       int * pret = ret;
 
@@ -94,10 +85,10 @@ int * comb_query(int * regs1, int * regs2, int tam) {
          int * aux2;
          for(aux2 = regs2; aux2 < regs2 + tam && *aux2 != 0 && *aux1 != *aux2; aux2++); 
 
-         if(*aux1 == *aux2) *pret++ = *aux1;
+         if(*aux1 == *aux2) *pret++ = *aux1; //valores iguais serão adicionados ao retorno
       }
 
-      if(!*ret) {
+      if(!*ret) { //em caso de interseção vazia libera retorno
          free(ret);
          ret = NULL;
       }
@@ -107,7 +98,7 @@ int * comb_query(int * regs1, int * regs2, int tam) {
 }
 
 int * _range(ArvAVL * arv, void * chave, Faixa eq, int tam) {
-   int * ret = (int *) calloc(tam+1, sizeof(int)); //vetor de inteiro para retorno
+   int * ret = (int *) calloc(tam+1, sizeof(int)); //vetor de inteiro para retorno com fim zero
    int * pret = ret; //ponteiro para atribuição nos campos do vetor
    int cmp;
 
@@ -124,7 +115,7 @@ int * _range(ArvAVL * arv, void * chave, Faixa eq, int tam) {
             if(cmp < 0) {
                reg = aux->regs;
 
-               _salva_ret(&pret, reg);
+               _salva_ret(&pret, reg); //adição do valor ao retorno
 
                aux = *(_antecessor(&aux)); //retoma antecessor para buscar valores maiores
             }
@@ -139,21 +130,21 @@ int * _range(ArvAVL * arv, void * chave, Faixa eq, int tam) {
             if(cmp > 0) {
                reg = aux->regs;
 
-               _salva_ret(&pret, reg);
+               _salva_ret(&pret, reg); //adição do valor ao retorno
 
                aux = *(_sucessor(&aux)); //retoma antecessor para buscar valores maiores
             }
          } while(aux && cmp > 0); 
          break;
-      case IGUAL: // registros com chaves iguais à chave de busca 
-         reg = busca_avl(arv, chave);
+      case IGUAL: //registros com chaves iguais à chave de busca 
+         reg = busca_avl(arv, chave); //busca simples em caso de faixa igual
          _salva_ret(&pret, reg);
          break;
       default:
-         printf("Comparação inválida\n");
+         printf("!!!INVÁLIDA!!!\n");
    }
 
-   if(!*ret) {
+   if(!*ret) { //em caso de vazio libera retorno
       free(ret);
       ret = NULL;
    }
@@ -163,7 +154,7 @@ int * _range(ArvAVL * arv, void * chave, Faixa eq, int tam) {
 
 void _salva_ret(int ** pret, Reg * reg) {
    while(reg) { //iteração da lista
-      *(*pret)++ = reg->cod_ibge; //iteração do vetor de retorno
+      *(*pret)++ = reg->cod; //iteração do vetor de retorno
       reg = reg->prox;
    } 
 }

@@ -1,13 +1,13 @@
 #include "../include/mun.h"
 
-/* constroi objeto Municipio */
-Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capital, int uf, int id, int ddd, char * fuso) {
-   Mun * mun = malloc(sizeof(Mun));
+/* constrói objeto Mun */
+Mun * aloca_mun(int ibge, char * nome, float lat, float lon, int capital, int uf, int id, int ddd, char * fuso) {
+   Mun * mun = (Mun *) malloc(sizeof(Mun));
 
    mun->cod_ibge = ibge;
    strcpy(mun->nome, nome);
-   mun->coord[0]= latitude;
-   mun->coord[1]= longitude;
+   mun->coord[0]= lat;
+   mun->coord[1]= lon;
    mun->capital = capital;
    mun->cod_uf = uf;
    mun->siafi_id = id;
@@ -17,15 +17,13 @@ Mun * aloca_mun(int ibge, char * nome, float latitude, float longitude, int capi
    return mun;
 }
 
-/* retorna chave do Municipio */
+/* retorna chave do município */
 int get_key_mun(void * mun) {
    return (*((Mun *) mun)).cod_ibge;
 }
 
-/* mostra todos os campos do Municipio */
-void exibe_mun(void * cid) {
-   Mun * mun = (Mun *) cid;
-
+/* mostra todos os campos do munícipio */
+void exibe_mun(Mun * mun) {
    printf("codigo_ibge: %d\n", mun->cod_ibge);
    printf("nome: %s\n", mun->nome);
    printf("latitude: %f\n", mun->coord[0]);
