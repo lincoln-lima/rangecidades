@@ -34,56 +34,59 @@ As funções utilizadas para leitura dos registros de municípios do arquivo `.j
    ```
 ## Utilização
 ### Menu
-   - Um menu será exibido para dar início às buscas
-      ```bash
-      [0] Encerrar
-      [1] Continuar
-      
-      --> _
-      ```
+Um menu será exibido para dar início às buscas
+```bash
+[0] Encerrar
+[1] Continuar
+
+--> _
+```
 ### Campos
-   - Será questionado ao usuário a respeito de cada campo se este deverá ser incluso à busca.
-      ```bash
-      Nome:
-      [0] não
-      [1] sim
+Será questionado ao usuário a respeito de cada campo se este deverá ser incluso à busca.
+```bash
+Nome:
+[0] não
+[1] sim
 
-      --> _
-      ```
-   - Ao incluí-lo ele será combinado apenas com os demais campos escolhidos.
-   - Do contrário, ele não será incluso no resultado da busca.
+--> _
+```
+Ao incluí-lo ele será combinado apenas com os demais campos escolhidos.
+Do contrário, ele não será incluso no resultado da busca.
 ### Faixa
-   - Após optar por um campo<sup>1</sup>, o seguinte menu será exibido:
-      ```bash
-      Intervalo:
-      [0] igual a(=)
-      [1] maior que(>)
-      [2] menor que(<)
-      [3] entre(< >)
+Após optar por um campo[^1], o seguinte menu será exibido:
+```bash
+Intervalo:
+[0] igual a(=)
+[1] maior que(>)
+[2] menor que(<)
+[3] entre(< >)
 
-      --> _
-      ```
-   - Tais opções se referem ao valor a ser especificado, logo após solicitando a chave.
-      ```bash
-      Chave: _
-      ```
-   > No caso da opção `(3) entre(< >)`<sup>2</sup> será solicitado uma chave mínima e uma chave máxima.
+--> _
+```
+Tais opções se referem ao valor a ser especificado, logo após solicitando a chave.
+```bash
+Chave: _
+```
+> No caso da opção `(3) entre(< >)`[^2]será solicitado uma chave mínima e uma chave máxima.
 ### Resultado
-   - A busca retornará todas as informações referentes ao municípios encontrados, e ao fim sua quantidade.
-      ```bash
-      -----------------------------------
-      codigo_ibge: 5002704
-      nome: Campo Grande
-      latitude: -20.448601
-      longitude: -54.629501
-      capital: 1
-      codigo_uf: 50
-      siafi_id: 9051
-      ddd: 67
-      fuso_horario: America/Porto_Velho
-      -----------------------------------
-      Municípios encontrados: 1
-      ```
-   - O menu inicial será reexibido para uma nova busca
+A busca retornará todas as informações referentes ao municípios encontrados, e ao fim sua quantidade.
+```bash
+-----------------------------------
+codigo_ibge: 5002704
+nome: Campo Grande
+latitude: -20.448601
+longitude: -54.629501
+capital: 1
+codigo_uf: 50
+siafi_id: 9051
+ddd: 67
+fuso_horario: America/Porto_Velho
+-----------------------------------
+Municípios encontrados: 1
+```
+O menu inicial será reexibido para uma nova busca
 ## Tudo certo
 Agora é só aproveitar!
+
+[^1]: No caso do campo Nome, o menu não será exibido, apenas solicitará a chave
+[^2]: Essa função não incluirá nem o mínimo nem o máximo solicitado
