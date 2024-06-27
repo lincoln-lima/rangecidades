@@ -14,10 +14,11 @@ typedef int boolean;
 #define SIM 1
 #define NAO 0
 
-Mun * acessa_mun_json(JSENSE * arq, int pos); //declaração da função que retorna muncípio do json
+void menu_inicial(int * op); //menu que encerra ou continua execução do programa
+Mun * acessa_mun_json(JSENSE * arq, int pos); //declaração da função que retorna município do json
 
 int main() {
-   JSENSE * arq = jse_from_file("./files/municipios.json"); //abertura do arquivo json
+   JSENSE * arq = jse_from_file("./file/municipios.json"); //abertura do arquivo json
 
    /* instanciação das árvores relativas aos queries */
    ArvAVL arvMunNome;
@@ -35,7 +36,7 @@ int main() {
    ArvAVL arvMunDDD;
    constroi_avl(&arvMunDDD, INT);
 
-   /* instanciação da tabela hash para código ibge */
+   /* instanciação da tabela hash */
    HashInt hashMun;
    constroi_hash_int(&hashMun, TAM_HASH, get_key_mun);
 
@@ -66,7 +67,7 @@ int main() {
       switch(continuar) {
          case NAO:
             printf("-----------------------------------\n");
-            printf("Encerrando execução...\n");
+            printf("Execução encerrada.\n");
             break;
          case SIM:
             /* campos para armazenar queries  */
@@ -80,10 +81,10 @@ int main() {
             int * res = NULL; //ponteiro para armazenar resultado
 
             /* ponteiros de ponteiro para manipulação  */
-            int ** ppres = &res; 
             int ** auxpp = campos;
+            int ** ppres = &res; 
 
-            //nomes dos campos
+            /* nomes dos campos */
             char * labels[N_CAMPOS] =
             {
                "Nome",
@@ -109,7 +110,7 @@ int main() {
 
                      auxpp = ppres; //auxiliar agora aponta para resultado, assim combinando suas queries
 
-                     free(campos[i]); //liberação do campo
+                     free(campos[i]); //liberação do campo da iteração
                      break;
                   case NAO:
                      if(*auxpp == campos[i]) auxpp++; //auxiliar permanece apontando para os campos
@@ -117,12 +118,6 @@ int main() {
                   default:
                      printf("!!!INVÁLIDA!!!\n");
                }
-               // printf("conj: %p\n", conj);
-               // printf("conj[i]: %p\n\n", conj[i]);
-               // printf("auxpp: %p\n", auxpp);
-               // printf("*auxpp: %p\n\n", *auxpp);
-               // printf("ppres: %p\n", ppres);
-               // printf("*ppres: %p\n\n", *ppres);
             }
 
             if(res) { //exibição dos municípios encontrados
@@ -143,11 +138,12 @@ int main() {
             free(res);
             break;
          default:
-            printf("INVÁLIDA!!!\n");
+            printf("!!!INVÁLIDA!!!\n");
       }
 
    } while(continuar);
 
+   /* desalocação de todas as estruturas  */
    libera_avl(&arvMunNome);
    libera_avl(&arvMunLat);
    libera_avl(&arvMunLon);
@@ -155,12 +151,25 @@ int main() {
    libera_avl(&arvMunDDD);
    libera_hash_int(&hashMun);
 
-   jse_free(arq);
+   jse_free(arq); //liberação do arquivo json
 
    return EXIT_SUCCESS;
 }
 
-/* acessa e retorna município de json */
+void menu_inicial(int * op) { 
+   printf("-----------------------------------\n");
+   printf("\n");
+
+   printf("[0] Encerrar\n");
+   printf("[1] Continuar\n");
+   printf("\n--> ");
+   scanf("%d", op);
+
+   *op = (*op == 1) ? *op : 0;
+
+   printf("\n");
+}
+
 Mun * acessa_mun_json(JSENSE * arq, int pos) {
    int error;
 
