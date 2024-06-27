@@ -10,10 +10,14 @@
 #define TAM_HASH 11139
 #define N_CAMPOS 5
 
-Mun * acessa_mun_json(JSENSE * arq, int pos);
+typedef int boolean;
+#define SIM 1
+#define NAO 0
+
+Mun * acessa_mun_json(JSENSE * arq, int pos); //declaração da função que retorna muncípio do json
 
 int main() {
-   JSENSE * arq = jse_from_file("./files/municipios.json");
+   JSENSE * arq = jse_from_file("./files/municipios.json"); //abertura do arquivo json
 
    /* instanciação das árvores relativas aos queries */
    ArvAVL arvMunNome;
@@ -36,9 +40,10 @@ int main() {
    constroi_hash_int(&hashMun, TAM_HASH, get_key_mun);
 
    /*
-      busca dos municípios no json
-      e inserção das chaves com código em sua árvore
-      */
+    * busca dos municípios no json
+    * inserção das chaves com código em sua árvore
+    * e adição de todos na tabela hash, como chave tendo código ibge
+    * */
    for(int i = 0; i < QTD_MUNICIPIOS; i++) {
       Mun * mun = acessa_mun_json(arq, i);
       insere_avl(&arvMunNome, &mun->nome, mun->cod_ibge);
@@ -49,33 +54,36 @@ int main() {
       insere_hash_int(&hashMun, mun);
    }
 
+   /* conjunto de todas as árvores  */
    ArvAVL * jungle[N_CAMPOS] = {&arvMunNome, &arvMunLat, &arvMunLon, &arvMunUF, &arvMunDDD};
-
-   int continuar;
 
    printf("Busca de munícipios por range query\n");
 
+   boolean continuar;
    do {
       menu_inicial(&continuar);
 
       switch(continuar) {
-         case 0:
+         case NAO:
             printf("-----------------------------------\n");
             printf("Encerrando execução...\n");
             break;
-         case 1:
+         case SIM:
+            /* campos para armazenar queries  */
             int * nomes = NULL;
             int * lats = NULL;
             int * lons = NULL;
             int * ufs = NULL;
             int * ddds = NULL;
 
-            int * conj[N_CAMPOS+1] = {nomes, lats, lons, ufs, ddds, NULL};
-            int ** auxpp = conj;
+            int * campos[N_CAMPOS] = {nomes, lats, lons, ufs, ddds}; //conjunto dos campos
+            int * res = NULL; //ponteiro para armazenar resultado
 
-            int * res = NULL;
-            int ** ppres = &res;
+            /* ponteiros de ponteiro para manipulação  */
+            int ** ppres = &res; 
+            int ** auxpp = campos;
 
+            //nomes dos campos
             char * labels[N_CAMPOS] =
             {
                "Nome",
@@ -85,30 +93,30 @@ int main() {
                "DDD"
             };
 
-            int op;
-            int eq;
+            boolean op; //escolher se campo será buscado
+            Faixa eq; //definir tipo de intervalo
 
             for(int i = 0; i < N_CAMPOS; i++) {
-               // printf("conj: %p\n", conj);
-               // printf("conj[i]: %p\n\n", conj[i]);
-               // printf("auxpp: %p\n", auxpp);
-               // printf("*auxpp: %p\n\n", *auxpp);
-               // printf("ppres: %p\n", ppres);
-               // printf("*ppres: %p\n\n", *ppres);
-
                menu_escolha(labels[i], &op);
 
-               if(op) {
-                  if(jungle[i]->tipo != STR) menu_range(&eq);
-                  else eq = IGUAL;
+               switch(op) {
+                  case SIM:
+                     if(jungle[i]->tipo != STR) menu_range(&eq); //chamada de intervalo apenas caso não seja string
+                     else eq = IGUAL;
 
-                  conj[i] = query(jungle[i], eq, QTD_MUNICIPIOS);
-                  *ppres = comb_query(*auxpp, conj[i], QTD_MUNICIPIOS);
+                     campos[i] = query(jungle[i], eq, QTD_MUNICIPIOS); //campo armazena retorno da query
+                     *ppres = comb_query(*auxpp, campos[i], QTD_MUNICIPIOS); //resultado prévio e final já são armazenados
 
-                  auxpp = ppres;
+                     auxpp = ppres; //auxiliar agora aponta para resultado, assim combinando suas queries
+
+                     free(campos[i]); //liberação do campo
+                     break;
+                  case NAO:
+                     if(*auxpp == campos[i]) auxpp++; //auxiliar permanece apontando para os campos
+                     break;
+                  default:
+                     printf("!!!INVÁLIDA!!!\n");
                }
-               else if(*auxpp == conj[i]) auxpp++; 
-
                // printf("conj: %p\n", conj);
                // printf("conj[i]: %p\n\n", conj[i]);
                // printf("auxpp: %p\n", auxpp);
@@ -117,11 +125,11 @@ int main() {
                // printf("*ppres: %p\n\n", *ppres);
             }
 
-            if(res) {
+            if(res) { //exibição dos municípios encontrados
                int qtd = 0;
                for(int * pres = res; pres < res + QTD_MUNICIPIOS && *pres != 0; pres++) {
                   printf("-----------------------------------\n");
-                  exibe_mun((Mun *) busca_hash_int(&hashMun, *pres));
+                  exibe_mun((Mun *) busca_hash_int(&hashMun, *pres)); //busca na hash a partir do código armazenado no resultado
                   printf("-----------------------------------\n");
 
                   qtd++;
@@ -131,12 +139,7 @@ int main() {
             } 
             else printf("Nenhum município encontrado!\n");
 
-            /* desalocação de arrays */
-            free(nomes);
-            free(lats);
-            free(lons);
-            free(ufs);
-            free(ddds);
+            /* desalocação do resultado */
             free(res);
             break;
          default:
