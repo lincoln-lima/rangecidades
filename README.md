@@ -3,7 +3,7 @@
 ## Descrição
 O trabalho consiste na **adaptação** de árvore AVL para que suporte range queries (busca por intervalos).
 
-Conforme o [trabalho anterior](https://github.com/lincoln-lima/cidadesproximas), será utilizado a mesma base de dados: o arquivo [`municipios.json`](https://github.com/kelvins/municipios-brasileiros/blob/main/json/municipios.json).
+Conforme o [trabalho anterior](https://github.com/lincoln-lima/cidadesproximas), será utilizado a mesma base de dados: o arquivo [`"municipios.json"`](https://github.com/kelvins/municipios-brasileiros/blob/main/json/municipios.json).
 
 Assim, é possível realizar consultas de todas as cidade que possuam:
 - O DDD entre 15 e 20.
@@ -32,8 +32,8 @@ As funções utilizadas para leitura dos registros de municípios do arquivo `.j
    ```bash
    ./run
    ```
-### Utilização
-#### Menu
+## Utilização
+### Menu
    - Um menu será exibido para dar início às buscas
       ```bash
       [0] Encerrar
@@ -41,7 +41,7 @@ As funções utilizadas para leitura dos registros de municípios do arquivo `.j
       
       --> _
       ```
-#### Campos
+### Campos
    - Será questionado ao usuário a respeito de cada campo se este deverá ser incluso à busca.
       ```bash
       Nome:
@@ -52,7 +52,7 @@ As funções utilizadas para leitura dos registros de municípios do arquivo `.j
       ```
    - Ao incluí-lo ele será combinado apenas com os demais campos escolhidos.
    - Do contrário, ele não será incluso no resultado da busca.
-#### Faixa
+### Faixa
    - Após optar por um campo<sup>1</sup>, o seguinte menu será exibido:
       ```bash
       Intervalo:
@@ -68,7 +68,7 @@ As funções utilizadas para leitura dos registros de municípios do arquivo `.j
       Chave: _
       ```
    > No caso da opção `(3) entre(< >)`<sup>2</sup> será solicitado uma chave mínima e uma chave máxima.
-#### Resultado
+### Resultado
    - A busca retornará todas as informações referentes ao municípios encontrados, e ao fim sua quantidade.
       ```bash
       -----------------------------------
