@@ -1,32 +1,33 @@
 # Busca de municípios por Range Query
 ![imagem mapa do Brasil com latitude e longitude](https://docplayer.com.br/docs-images/17/147974/images/3-0.png)
 ## Descrição
-O trabalho consiste na **adaptação** de árvore AVL para que suporte a range query (busca por intervalos).
+O trabalho consiste na **adaptação** de árvore AVL para que suporte range queries (busca por intervalos).
 
-Considera-se a mesma base de dados do [trabalho anterior](https://github.com/lincoln-lima/cidadesproximas): IBGE de cidades do arquivo [municipios.json](https://github.com/kelvins/municipios-brasileiros/blob/main/json/municipios.json).
+Conforme o [trabalho anterior](https://github.com/lincoln-lima/cidadesproximas), será utilizado a mesma base dados: o arquivo [municipios.json](https://github.com/kelvins/municipios-brasileiros/blob/main/json/municipios.json).
 
 Assim, é possível realizar consultas de todas as cidade que possuam:
 - O DDD entre 15 e 20.
 - A latitude entre -31 e -34, e a longitude entre -50 e -54.
+
 Ou ainda fazer combinações entre latitude, longitude e DDD.
 ## Iniciando 
 ### Biblioteca parser de JSON
+As funções utilizadas para leitura dos registros de municípios do arquivo `.json` foram importadas da biblioteca [JSENSE](https://gitlab.com/greggink/youtube_episode_jsense).
 > [!NOTE]
-> As funções utilizadas para leitura dos registros de municípios está referenciada por sua [licença](/license/LICENSE), encontrando-se disponível em seu repositório:
-> [](https://gitlab.com/greggink/youtube_episode_jsense).
+> Seu uso é restrito mediante referência por sua licença, disponibilizada na pasta [`/license`](/license/LICENSE) do projeto.
 ### Instalação
 1. Clone o repositório.
-```bash
-git clone https://github.com/lincoln-lima/rangecidades.git
-```
+   ```bash
+   git clone https://github.com/lincoln-lima/rangecidades.git
+   ```
 2. Mude para repositório, utilizando por exemplo o comando `cd rangecidades`.
 3. Compile os arquivos da pasta `src` do projeto.
-```bash
-gcc -o run ./src/*.c
-```
-4. Execute o arquivo gerado `./run`.
+   ```bash
+   gcc -o run ./src/*.c
+   ```
+4. Execute o arquivo gerado: `./run`.
 ### Utilização
-- Menu
+#### Menu
    - Um menu será exibido para dar início às buscas
    ```bash
    [0] Encerrar
@@ -34,7 +35,7 @@ gcc -o run ./src/*.c
    
    --> _
    ```
-- Campos
+#### Campos
    - Será questionado ao usuário a respeito de cada campo se este deverá ser incluso à busca.
    ```bash
    Nome:
@@ -45,7 +46,7 @@ gcc -o run ./src/*.c
    ```
    - Ao incluí-lo ele será combinado apenas com os demais campos escolhidos.
    - Do contrário, ele não será incluso no resultado da busca.
-- Faixa
+#### Faixa
    - Após optar por um campo<sub>1</sub>, o seguinte menu será exibido:
    ```bash
    Intervalo:
@@ -61,7 +62,7 @@ gcc -o run ./src/*.c
    Chave: _
    ```
    > No caso da opção `(3) entre(< >)`<sub>2</sub> será solicitado uma chave mínima e uma chave máxima.
-- Resultado
+#### Resultado
    - A busca retornará todas as informações referentes ao municípios encontrados, e ao fim sua quantidade.
    ```bash
    -----------------------------------
