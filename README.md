@@ -37,9 +37,14 @@ Cada campo será armazenado em sua respectiva árvore, de modo a serem independe
 > Assim sua consulta estará disponível ao informar seu código IBGE.
 
 ## Iniciando 🔰
+A seguir será descrito um passo a passo para iniciar o uso da ferramenta.
+
+### Pré-requisitos 🧰
+- GCC (Compilador C)
+- Make
 
 ### 🗄️ Biblioteca parser de JSON
-As funções utilizadas para leitura dos registros de municípios do arquivo `.json` foram importadas da biblioteca [JSENSE](https://gitlab.com/greggink/youtube_episode_jsense).
+As funções utilizadas para leitura dos registros de municípios do arquivo `.json`, e conversão de _strings_ para inteiros ou reais foram importadas da biblioteca [JSENSE](https://gitlab.com/greggink/youtube_episode_jsense).
 > [!NOTE]
 > Seu uso é restrito mediante referência por sua **licença**, disponibilizada na pasta [`/license`](/license/LICENSE) do projeto.
 
@@ -52,13 +57,21 @@ As funções utilizadas para leitura dos registros de municípios do arquivo `.j
    ```bash
    cd rangecidades 
    ```
-3. Compile os arquivos da pasta `src`.
+3. Defina o caminho das bibliotecas
    ```bash
-   gcc -o run ./src/*.c
+   export LD_LIBRARY_PATH=./lib
    ```
-4. Execute o arquivo gerado.
+4. Execute o comando abaixo para gerar o executável com suas bibliotecas dinâmicas.
    ```bash
-   ./run
+   make
+   ```
+5. Com a linha abaixo execute o binário do programa.
+   ```bash
+   make run
+   ```
+6. Para limpeza de todos os arquivos gerados ao fim do uso, execute:
+   ```bash
+   make clean
    ```
 
 ## Utilização 🖱️
