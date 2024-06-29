@@ -10,7 +10,7 @@ BIN = ./bin
 APP = app
 
 CC = gcc
-LIBS = -L $(LIB) -l hashint -l technical
+LIBS = -L $(LIB) -l mun -l hashint -l technical
 
 ###############
 ## diretivas ##
