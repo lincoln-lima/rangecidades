@@ -1,4 +1,4 @@
-#include "../include/technical.h"
+#include "technical.h"
 
 int tec_string_equal(char *str1, char *str2){
 

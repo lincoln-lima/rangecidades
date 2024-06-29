@@ -1,7 +1,7 @@
 #ifndef __AVLMOD__
 #define __AVLMOD__
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef int Tipo;

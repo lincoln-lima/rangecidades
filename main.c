@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "include/mun.h"
-#include "include/avl.h"
-#include "include/range_query.h"
-#include "include/hash_int.h"
-#include "include/jsense.h"
+#include "mun.h"
+#include "avl.h"
+#include "rangequery.h"
+#include "hashint.h"
+#include "jsense.h"
 
 #define QTD_MUNICIPIOS 5570
 #define TAM_HASH 11139
