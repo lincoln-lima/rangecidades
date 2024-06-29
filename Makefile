@@ -59,7 +59,7 @@ $(LIB)/lib%.so: $(OBJ)/%.o
 
 mymain: $(BIN)/$(MAIN)
 
-$(BIN)/$(MAIN): $(MAIN).c
+$(BIN)/$(MAIN): $(SRC)/$(MAIN).c
 	$(CC) $< -I $(INCLUDE) -L $(LIB) $(LIBS) -o $@
 
 # gcc main.c -I include/ -L lib/ -l lib... -o /bin/main
