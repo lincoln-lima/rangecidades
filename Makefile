@@ -10,7 +10,7 @@ BIN = ./bin
 APP = app
 
 CC = gcc
-LIBS = -l technical
+LIBS = -L $(LIB) -l hashint -l technical
 
 ###############
 ## diretivas ##
@@ -28,10 +28,10 @@ $(BIN)/:
 
 appmun: $(BIN)/$(APP)
 
-$(BIN)/$(APP): $(SRC)/*.c
-	$(CC) $^ -I $(INCLUDE) -L $(LIB) $(LIBS) -o $@
+$(BIN)/$(APP): $(APP)/main.c $(SRC)/*.c
+	$(CC) $^ -I $(INCLUDE) $(LIBS) -o $@
 
-# gcc main.c -I include/ -L lib/ -l ... -o /bin/main
+# gcc app/main.c src/*.c -I include/ -L lib/ -l ... -o /bin/main
 
 #################
 ## manualmente ##
