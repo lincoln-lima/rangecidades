@@ -1,4 +1,4 @@
-#include "../include/hash_int.h"
+#include "hashint.h"
 
 u_int32_t int32hash(u_int32_t a)
 {
