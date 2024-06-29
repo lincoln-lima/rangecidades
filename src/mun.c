@@ -1,4 +1,4 @@
-#include "../include/mun.h"
+#include "mun.h"
 
 /* constrói objeto Mun */
 Mun * aloca_mun(int ibge, char * nome, float lat, float lon, int capital, int uf, int id, int ddd, char * fuso) {

@@ -1,4 +1,4 @@
-#include "../include/avl.h"
+#include "avl.h"
 
 /* constrói */
 void constroi_avl(ArvAVL * arv, Tipo tipo) {

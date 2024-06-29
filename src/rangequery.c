@@ -1,4 +1,4 @@
-#include "../include/range_query.h"
+#include "rangequery.h"
 
 /* funções de menu */
 void menu_escolha(char * label, int * op) { //menu de decisão se campo será incluso ao query

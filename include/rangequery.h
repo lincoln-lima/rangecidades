@@ -2,7 +2,7 @@
 #define __RANGEQUERYAVL__
 #include <stdio.h>
 #include <stdlib.h>
-#include "./avl.h"
+#include "avl.h"
 
 typedef int Faixa;
 #define IGUAL 0
