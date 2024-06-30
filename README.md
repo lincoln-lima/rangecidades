@@ -15,7 +15,7 @@ Ou ainda fazer combinações que representam a interseção entre nome, latitude
 A estruturação a nível de código é responsável por tornar um programa **eficaz**, e ao mesmo tempo sua organização pode remeter à sua **complexidade**.
 
 ### 📚 Sucessor e Antecessor
-> [!TIP]
+> [!NOTE]
 > O estudioso Thomas Cormen exemplificou um algoritmo do sucessor de um nó, em seu livro [Algoritmos: Teoria e Prática](https://computerscience360.files.wordpress.com/2018/02/algoritmos-teoria-e-prc3a1tica-3ed-thomas-cormen.pdf), cujo sua aplicação não se faz necessário a **comparação** das chaves dos nós, apenas o seu nó pai.
 
 Ao percorrer uma árvore balanceada deve-se utilizar a estrutura ao seu favor, e com isso em mente, foi incorporado à AVL nós que possuam ponteiros para seus **pais**, de modo a possibilitar a criação de funções que retornem o _sucessor_ e também o _antecessor_ do respectivo nó.
@@ -37,8 +37,8 @@ Cada campo será armazenado em sua respectiva árvore, de modo a serem independe
 > Assim sua consulta estará disponível ao informar seu código IBGE.
 
 ## Iniciando 🔰
-> Abaixo segue o _link_ de um vídeo no YouTube descrevendo e explicando a ferramenta.
-> 
+Abaixo segue o _link_ de um vídeo no YouTube descrevendo e explicando a ferramenta.
+> [!TIP]
 > [![youtube-video](https://img.youtube.com/vi/f7JtkHlj6B0/0.jpg)](https://youtu.be/f7JtkHlj6B0)
 
 ### Pré-requisitos 🧰
@@ -47,7 +47,7 @@ Cada campo será armazenado em sua respectiva árvore, de modo a serem independe
 
 ### 🗄️ Biblioteca parser de JSON
 As funções utilizadas para leitura dos registros de municípios do arquivo `.json`, e conversão de _strings_ para inteiros ou reais foram importadas da biblioteca [JSENSE](https://gitlab.com/greggink/youtube_episode_jsense).
-> [!NOTE]
+> [!IMPORTANT]
 > Seu uso é restrito mediante referência por sua **licença**, disponibilizada na pasta [`/license`](/license/LICENSE) do projeto.
 
 ### ⌨️ Instalação
