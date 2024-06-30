@@ -37,7 +37,9 @@ Cada campo será armazenado em sua respectiva árvore, de modo a serem independe
 > Assim sua consulta estará disponível ao informar seu código IBGE.
 
 ## Iniciando 🔰
-A seguir será descrito um passo a passo para iniciar o uso da ferramenta.
+> Abaixo segue o _link_ de um vídeo no YouTube descrevendo e explicando a ferramenta.
+> 
+> [![youtube-video](https://img.youtube.com/vi/f7JtkHlj6B0/0.jpg)](https://youtu.be/f7JtkHlj6B0)
 
 ### Pré-requisitos 🧰
 - GCC (Compilador C)
